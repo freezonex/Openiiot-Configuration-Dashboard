@@ -1,0 +1,4 @@
+{
+  "/flows/[fid]/page": "app/flows/[fid]/page.js",
+  "/page": "app/page.js"
+}
