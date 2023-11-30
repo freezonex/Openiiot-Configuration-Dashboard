@@ -1,4 +1,9 @@
 {
-  "/flows/[fid]/page": "app/flows/[fid]/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/flows/[id]/page": "app/flows/[id]/page.js",
+  "/api/flows/route": "app/api/flows/route.js",
+  "/api/flows/create/route": "app/api/flows/create/route.js",
+  "/flows/create/page": "app/flows/create/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/flows/[fid]/route": "app/api/flows/[fid]/route.js"
 }

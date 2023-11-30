@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 
 import Grid from "@mui/material/Unstable_Grid2";
@@ -6,19 +6,22 @@ import EdgeCard from "@/components/FreeFlowEdge/EdgeCard";
 import AddIcon from "@mui/icons-material/Add";
 
 import AddEdgeSite from "./AddEdgeSite";
-import { Alexandria } from "next/font/google";
+import SideNav from "../Home/SideNav";
 
-const cardList = [
-  { heading: "NodeRed", text: "Site1", url: "http://47.245.114.164:1880/" },
-  { heading: "NodeRed", text: "Site2", url: "http://47.245.114.166:1880/" },
-  { heading: "NodeRed", text: "Site3", url: "http://47.245.114.165:1880/" },
-];
-
-export default function EdgeLayout() {
+export default function EdgeLayout(props) {
+  const { handleAddEdge, edgeList, handleDeleteEdge } = props;
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [listItems, setListItems] = useState(cardList);
+  const [listItems, setListItems] = useState([]);
+  const [query, setQuery] = useState({});
 
+  // useEffect(() => {
+  //   fetch("/api/edges", { method: "GET" })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setListItems(res.data.list);
+  //     });
+  // }, [query]);
   const handleOpenAdd = () => {
     setOpen(true);
   };
@@ -31,13 +34,35 @@ export default function EdgeLayout() {
       setAlertOpen(true);
       return;
     }
-    const newSite = {
-      heading: siteType,
-      text: siteDescription,
-      url: siteAddress,
-    };
-    setListItems([...listItems, newSite]);
+    handleAddEdge(siteAddress, siteType, siteDescription);
+    // try {
+    //   const body = {
+    //     url: siteAddress,
+    //     type: siteType,
+    //     description: siteDescription,
+    //   };
+    //   await fetch("/api/edges", {
+    //     method: "POST",
+    //     body: JSON.stringify(body),
+    //   }).then((res) => res.json());
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
     setOpen(false);
+    setQuery({});
+  };
+
+  const handleDeleteItem = (siteAddress) => {
+    handleDeleteEdge(siteAddress);
+    // try {
+    //   await fetch("/api/edges/" + id, {
+    //     method: "DELETE",
+    //   }).then((res) => res.json());
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    setQuery({});
   };
 
   return (
@@ -61,15 +86,15 @@ export default function EdgeLayout() {
           ></AddEdgeSite>
         </Box>
       </Grid>
-      {listItems.map((item, index) => {
+      {edgeList.map((item, index) => {
         return (
           <Grid key={item.url} xs={3}>
             <Box>
               <EdgeCard
                 sx={{ height: 300 }}
-                heading={item.heading}
-                text={item.text}
+                text={item.description}
                 url={item.url}
+                handleDeleteItem={handleDeleteItem}
               />
             </Box>
           </Grid>

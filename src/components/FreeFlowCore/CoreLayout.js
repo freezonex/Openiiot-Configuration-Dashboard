@@ -8,7 +8,8 @@ import {
   Box,
 } from "@mui/material";
 
-const CoreLayout = () => {
+const CoreLayout = (props) => {
+  const { handleConfirmCoreData } = props;
   const [formData, setFormData] = useState({
     mqtt_url: "",
     tsdb_url: "",
@@ -25,8 +26,7 @@ const CoreLayout = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //TODO: add logic here
-    console.log("Form Data:", formData);
+    handleConfirmCoreData(formData);
   };
 
   return (

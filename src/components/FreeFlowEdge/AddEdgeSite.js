@@ -28,7 +28,9 @@ function AddEdgeSite(props) {
   const handleDescriptionChange = (event) => {
     setSiteDescription(event.target.value);
   };
-  const onAddClick = () => {
+  const onAddClick = async (e) => {
+    e.preventDefault();
+
     handleAddSite(siteAddress, siteType, siteDescription);
   };
   return (

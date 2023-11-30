@@ -6,18 +6,13 @@ import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import SideNav from "@/components/Home/SideNav";
 
 export const metadata = {
   title: "Openiiot Configure Dashboard",
@@ -25,6 +20,7 @@ export const metadata = {
 };
 
 const DRAWER_WIDTH = 240;
+const FLOW_ICON = AccountTreeIcon;
 
 const FLOW_LINKS = [
   //{ text: "Home", href: '/', icon: HomeIcon },
@@ -70,39 +66,7 @@ export default function RootLayout({ children }) {
             anchor="left"
           >
             <Divider />
-            <List>
-              <ListItem key={"/"} disablePadding>
-                <ListItemButton component={Link} href="/">
-                  <ListItemIcon>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Home"></ListItemText>
-                </ListItemButton>
-              </ListItem>
-              {FLOW_LINKS.map(({ text, href, fid, icon: Icon }) => (
-                <ListItem key={href} disablePadding>
-                  <ListItemButton component={Link} href={href + "/" + fid}>
-                    <ListItemIcon>
-                      <Icon />
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-            <Divider sx={{ mt: "auto" }} />
-            <List>
-              {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Icon />
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
+            <SideNav></SideNav>
           </Drawer>
           <Box
             component="main"

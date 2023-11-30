@@ -9,10 +9,12 @@ import NoderedIcon from "../NoderedIcon";
 import NoderedImage from "@/static/image/NoderedPic.png";
 
 const EdgeCard = (props) => {
-  const { heading, text, url } = props;
+  const { heading, text, url, handleDeleteItem } = props;
   const handleOpenSite = (url) => {
-    console.log(url);
     window.open(url, "_blank");
+  };
+  const onDeleteClick = (url) => {
+    handleDeleteItem(url);
   };
   return (
     <Card>
@@ -37,6 +39,7 @@ const EdgeCard = (props) => {
       </CardContent>
       <CardActions>
         <Button onClick={() => handleOpenSite(url)}>Go to NodeRed</Button>
+        <Button onClick={() => onDeleteClick(url)}>Delete</Button>
       </CardActions>
     </Card>
   );

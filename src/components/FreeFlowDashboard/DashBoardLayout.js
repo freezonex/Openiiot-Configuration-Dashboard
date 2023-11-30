@@ -8,9 +8,10 @@ import {
   Box,
 } from "@mui/material";
 
-const DashboardLayout = () => {
+const DashboardLayout = (props) => {
+  const { handleConfirmDashboardData } = props;
   const [formData, setFormData] = useState({
-    oodm_url: "",
+    odm_url: "",
     grafana_url: "",
     bi_url: "",
   });
@@ -25,8 +26,7 @@ const DashboardLayout = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //TODO: add logic here
-    console.log("Form Data:", formData);
+    handleConfirmDashboardData(formData);
   };
 
   return (
@@ -44,8 +44,8 @@ const DashboardLayout = () => {
             <Typography>OODM</Typography>
             <TextField
               label="url"
-              name="oodm_url"
-              value={formData.oodm_url}
+              name="odm_url"
+              value={formData.odm_url}
               onChange={handleChange}
               margin="normal"
               required
