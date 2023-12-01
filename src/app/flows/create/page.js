@@ -76,7 +76,6 @@ const Flow = () => {
       const result = await response.json();
       console.log(result);
       setFlowInfo({ ...flowInfo, id: result.data.id });
-      console.log(flowInfo);
     } else {
       console.error("Failed to create the flow");
     }
