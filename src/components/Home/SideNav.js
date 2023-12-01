@@ -31,7 +31,6 @@ function SideNav() {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  // const [refresh, setRefresh] = useState({});
   const router = useRouter();
   const searchParams = useSearchParams();
   const { refresh, setRefresh } = useContext(FlowContext);

@@ -31,7 +31,7 @@ const Flow = () => {
   const [edges, setEdges] = useState([]);
   const [coreData, setCoreData] = useState({});
   const [dashboardData, setDashboardData] = useState({});
-  let { refresh, setRefresh } = useContext(FlowContext);
+  const { setRefresh } = useContext(FlowContext);
   useEffect(() => {
     if (flowInfo.id) {
       console.log(flowInfo.id);

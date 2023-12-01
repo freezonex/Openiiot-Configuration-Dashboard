@@ -7,7 +7,7 @@ import { FlowContext } from "@/app/flow-provider";
 
 const OverviewLayout = () => {
   const [data, setData] = useState([]);
-  let { refresh, setRefresh } = useContext(FlowContext);
+  const { refresh } = useContext(FlowContext);
   useEffect(() => {
     fetch("/api/flows")
       .then((res) => res.json())
