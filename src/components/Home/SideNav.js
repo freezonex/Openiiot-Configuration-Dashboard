@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -19,6 +19,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddFlow from "./AddFlow";
+import { FlowContext } from "@/app/flow-provider";
 
 const PLACEHOLDER_LINKS = [
   { text: "Settings", icon: SettingsIcon },
@@ -30,15 +31,16 @@ function SideNav() {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [query, setQuery] = useState({});
+  // const [refresh, setRefresh] = useState({});
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { refresh, setRefresh } = useContext(FlowContext);
 
   useEffect(() => {
     fetch("/api/flows")
       .then((res) => res.json())
       .then((res) => setData(res.data));
-  }, [query]);
+  }, [refresh]);
 
   const handleClose = () => {
     setOpen(false);
@@ -85,7 +87,6 @@ function SideNav() {
     );
 
     setOpen(false);
-    setQuery({});
   };
 
   const handleDeleteFlow = async (id) => {
@@ -99,7 +100,7 @@ function SideNav() {
       console.log(error);
     }
     router.push("/");
-    setQuery({});
+    setRefresh({});
   };
   return (
     <React.Fragment>

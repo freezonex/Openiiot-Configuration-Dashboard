@@ -1,5 +1,8 @@
 {
-  "/page": "app/page.js",
+  "/flows/create/page": "app/flows/create/page.js",
+  "/api/flows/create/route": "app/api/flows/create/route.js",
   "/flows/[id]/page": "app/flows/[id]/page.js",
-  "/flows/create/page": "app/flows/create/page.js"
+  "/api/flows/route": "app/api/flows/route.js",
+  "/page": "app/page.js",
+  "/api/flows/[fid]/route": "app/api/flows/[fid]/route.js"
 }

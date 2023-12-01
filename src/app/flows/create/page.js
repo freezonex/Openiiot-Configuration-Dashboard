@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -14,6 +14,7 @@ import CoreLayout from "@/components/FreeFlowCore/CoreLayout";
 import DashboardLayout from "@/components/FreeFlowDashboard/DashBoardLayout";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { FlowContext } from "@/app/flow-provider";
 
 const steps = ["FreeFlow Edge", "FreeFlow Core", "Dashboard"];
 
@@ -30,7 +31,7 @@ const Flow = () => {
   const [edges, setEdges] = useState([]);
   const [coreData, setCoreData] = useState({});
   const [dashboardData, setDashboardData] = useState({});
-
+  let { refresh, setRefresh } = useContext(FlowContext);
   useEffect(() => {
     if (flowInfo.id) {
       console.log(flowInfo.id);
@@ -76,6 +77,7 @@ const Flow = () => {
       const result = await response.json();
       console.log(result);
       setFlowInfo({ ...flowInfo, id: result.data.id });
+      setRefresh({});
     } else {
       console.error("Failed to create the flow");
     }
