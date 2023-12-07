@@ -14,11 +14,13 @@ import { httpToSupos, login } from "@/utils/http";
 
 import Cookies from "js-cookie";
 import UserContext from "@/utils/user-context";
+import { useRouter } from "next/navigation";
 
 const DRAWER_WIDTH = 240;
 
 export default function Layout({ children }) {
   const [user, setUser] = useState(null);
+  const router = useRouter();
   useEffect(() => {
     const token = Cookies.get("isv_token");
     if (token) {
@@ -33,6 +35,8 @@ export default function Layout({ children }) {
           setUser(null);
           router.push("/login");
         });
+    } else {
+      router.push("/login");
     }
   }, []);
   return (
