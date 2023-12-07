@@ -19,12 +19,13 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddFlow from "./AddFlow";
-import { FlowContext } from "@/app/flow-provider";
+import { FlowContext } from "@/utils/flow-provider";
+import { httpToSupos, removeLoginInfo } from "@/utils/http";
 
 const PLACEHOLDER_LINKS = [
-  { text: "Settings", icon: SettingsIcon },
-  { text: "Support", icon: SupportIcon },
-  { text: "Logout", icon: LogoutIcon },
+  // { text: "Settings", icon: SettingsIcon },
+  // { text: "Support", icon: SupportIcon},
+  { text: "Logout", icon: LogoutIcon, href: "/login" },
 ];
 
 function SideNav() {
@@ -60,24 +61,6 @@ function SideNav() {
       setAlertOpen(true);
       return;
     }
-    // try {
-    //   const body = {
-    //     name: name,
-    //     description: description,
-    //   };
-    //   const response = await fetch("/api/flows/create", {
-    //     method: "POST",
-    //     body: JSON.stringify(body),
-    //   });
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error! status: ${response.status}`);
-    //   }
-
-    //   const result = await response.json();
-
-    // } catch (error) {
-    //   console.log(error);
-    // }
     router.push(
       "/flows/create?" +
         createQueryString("name", name) +
@@ -94,18 +77,25 @@ function SideNav() {
         method: "DELETE",
       })
         .then((res) => res.json())
-        .then(router.push("/"));
+        .then(router.push("/flows"));
     } catch (error) {
       console.log(error);
     }
-    router.push("/");
+    router.push("/flows");
     setRefresh({});
+  };
+
+  const handleLogout = async () => {
+    httpToSupos.get("auth/logout").then((res) => {
+      console.log(res);
+      removeLoginInfo(router);
+    });
   };
   return (
     <React.Fragment>
       <List>
-        <ListItem key={"/"} disablePadding>
-          <ListItemButton component={Link} href="/">
+        <ListItem key={"/flows"} disablePadding>
+          <ListItemButton component={Link} href="/flows">
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -142,16 +132,14 @@ function SideNav() {
       </List>
       <Divider sx={{ mt: "auto" }} />
       <List>
-        {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Icon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem key="Logout" disablePadding>
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </React.Fragment>
   );

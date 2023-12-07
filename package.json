@@ -3,7 +3,7 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -15,9 +15,13 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@prisma/client": "^5.6.0",
+    "axios": "^1.6.2",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "next": "latest",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "js-cookie": "^3.0.5",
+    "next": "^14.0.3",
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "^8.1.3"

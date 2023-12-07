@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import FlowOverview from "@/components/Home/Overview";
 import { Divider } from "@mui/material";
-import { FlowContext } from "@/app/flow-provider";
+import { FlowContext } from "@/utils/flow-provider";
 
 const OverviewLayout = () => {
   const [data, setData] = useState([]);
@@ -18,8 +18,8 @@ const OverviewLayout = () => {
   }, [refresh]);
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {data.map(({ name, description, _count, core, dashboard }) => (
-        <React.Fragment>
+      {data.map(({ id, name, description, _count, core, dashboard }) => (
+        <React.Fragment key={id}>
           <FlowOverview
             flowName={name}
             flowDescription={description}

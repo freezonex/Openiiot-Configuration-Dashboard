@@ -14,7 +14,7 @@ import CoreLayout from "@/components/FreeFlowCore/CoreLayout";
 import DashboardLayout from "@/components/FreeFlowDashboard/DashBoardLayout";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { FlowContext } from "@/app/flow-provider";
+import { FlowContext } from "@/utils/flow-provider";
 
 const steps = ["FreeFlow Edge", "FreeFlow Core", "Dashboard"];
 
