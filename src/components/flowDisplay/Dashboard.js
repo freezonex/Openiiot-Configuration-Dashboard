@@ -14,11 +14,32 @@ const Dashboard = (props) => {
       }}
     >
       <Typography>Grafana</Typography>
-      <TextField name="mqtt_url" value={dashboard.grafanaUrl} margin="normal" />
+      <TextField
+        name="mqtt_url"
+        InputProps={{
+          readOnly: true,
+        }}
+        value={dashboard.grafanaUrl}
+        margin="normal"
+      />
       <Typography sx={{ mt: 2 }}>OODM</Typography>
-      <TextField name="tsdbUrl" value={dashboard.odmUrl} margin="normal" />
+      <TextField
+        name="tsdbUrl"
+        InputProps={{
+          readOnly: true,
+        }}
+        value={dashboard.odmUrl}
+        margin="normal"
+      />
       <Typography sx={{ mt: 2 }}>BI</Typography>
-      <TextField name="s3_url" value={dashboard.biUrl} margin="normal" />
+      <TextField
+        name="s3_url"
+        InputProps={{
+          readOnly: true,
+        }}
+        value={dashboard.biUrl}
+        margin="normal"
+      />
     </Box>
   );
 };

@@ -5,20 +5,19 @@ import FlowOverview from "@/components/Home/Overview";
 import { Divider } from "@mui/material";
 import { FlowContext } from "@/utils/flow-provider";
 
-const OverviewLayout = () => {
-  const [data, setData] = useState([]);
-  const { refresh } = useContext(FlowContext);
-  useEffect(() => {
-    fetch("/api/flows")
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-      });
-  }, [refresh]);
+const OverviewLayout = ({ flowData }) => {
+  // const { refresh } = useContext(FlowContext);
+  // useEffect(() => {
+  //   fetch("/api/flows")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData(res.data);
+  //     });
+  // }, [refresh]);
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {data.map(({ id, name, description, _count, core, dashboard }) => (
+      {flowData.map(({ id, name, description, _count, core, dashboard }) => (
         <React.Fragment key={id}>
           <FlowOverview
             flowName={name}

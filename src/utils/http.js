@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export const httpToSupos = axios.create({
   baseURL: "/suposapi",
@@ -11,8 +12,8 @@ httpToSupos.interceptors.request.use(
   (config) => {
     console.dir(localStorage.getItem("token"));
     // 判断是否存在token，如果存在的话，则每个http header都加上token
-    if (sessionStorage.getItem("isv_token") != null) {
-      config.headers.userToken = window.sessionStorage.getItem("isv_token");
+    if (Cookies.get("isv_token") != null) {
+      config.headers.userToken = Cookies.get("isv_token");
     }
     return config;
   },
@@ -24,14 +25,16 @@ httpToSupos.interceptors.request.use(
 httpToSupos.interceptors.response.use(
   function (response) {
     if (response.data.code === 401) {
-      refLogin();
+      removeLoginInfo();
+      login();
       return Promise.reject();
     }
     return response;
   },
   function (error) {
     if (error.response.status === 401) {
-      refLogin();
+      removeLoginInfo();
+      login();
       return Promise.reject();
     } else {
       return Promise.reject(error);
@@ -88,17 +91,18 @@ export function ridUrlParam(url, aParam) {
   return url;
 }
 
-export function refLogin(router) {
-  sessionStorage.removeItem("isv_token");
-  let redirectUrl = ridUrlParam(window.location.href, ["state", "code"]);
-  router.push(
-    `${
-      process.env.NEXT_PUBLIC_SUPOS_URL
-    }/inter-api/auth/v1/oauth2/authorize?responseType=code&state=1&redirectUri=${encodeURIComponent(
-      redirectUrl
-    )}`
-  );
-}
+// export function refLogin() {
+//   sessionStorage.removeItem("isv_token");
+//   Cookies.remove("isv_token");
+//   let redirectUrl = ridUrlParam(window.location.href, ["state", "code"]);
+//   router.push(
+//     `${
+//       process.env.NEXT_PUBLIC_SUPOS_URL
+//     }/inter-api/auth/v1/oauth2/authorize?responseType=code&state=1&redirectUri=${encodeURIComponent(
+//       redirectUrl
+//     )}`
+//   );
+// }
 
 export function removeLoginInfo(router) {
   sessionStorage.removeItem("isv_token");
@@ -109,13 +113,12 @@ export function removeLoginInfo(router) {
 export function login(callback, router) {
   if (typeof window !== "undefined") {
     // CSR
-    let token = sessionStorage.getItem("isv_token");
+    let token = Cookies.get("isv_token"); //use Cookies instead of session storage
     if (!token) {
       let code = getQueryString("code") || "";
       if (code) {
-        console.log("get code info");
+        console.log("get code info", code, window.location.search);
         //如果有code则调用接口换取token
-        console.log(httpToSupos.baseURL);
         httpToSupos
           .get("/auth/accessToken", {
             params: {
@@ -129,14 +132,15 @@ export function login(callback, router) {
             console.log("http-----", httpToSupos);
             if (code !== 0) return ElementUI.Message.error(msg);
             if (data) {
-              //请求结束获取到数据
-              window.sessionStorage.setItem("isv_token", data);
+              // //请求结束获取到数据
+              // window.sessionStorage.setItem("isv_token", data);
               Cookies.set("isv_token", data, { expires: 1 });
               console.log("登录信息获取完毕", data);
               callback();
             }
           });
       } else {
+        console.log(window.location.href);
         router.push(
           `${
             process.env.NEXT_PUBLIC_SUPOS_URL

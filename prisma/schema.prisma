@@ -10,10 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  role  String
+  flows Flow[]
+}
+
 model Flow {
   id          Int           @id @default(autoincrement())
   name        String
   description String
+  user        User          @relation(fields: [userId], references: [id])
+  userId      Int
   edges       FlowEdgeMap[]
   core        Core?         @relation(fields: [coreId], references: [id], onDelete: Cascade)
   coreId      Int?

@@ -14,11 +14,32 @@ const Core = (props) => {
       }}
     >
       <Typography>MQTT Broker</Typography>
-      <TextField name="mqtt_url" value={core.mqttUrl} margin="normal" />
+      <TextField
+        name="mqtt_url"
+        InputProps={{
+          readOnly: true,
+        }}
+        value={core.mqttUrl}
+        margin="normal"
+      />
       <Typography sx={{ mt: 2 }}>Time Series Database</Typography>
-      <TextField name="tsdbUrl" value={core.tsdbUrl} margin="normal" />
+      <TextField
+        name="tsdbUrl"
+        InputProps={{
+          readOnly: true,
+        }}
+        value={core.tsdbUrl}
+        margin="normal"
+      />
       <Typography sx={{ mt: 2 }}>S3</Typography>
-      <TextField name="s3_url" value={core.s3Url} margin="normal" />
+      <TextField
+        name="s3_url"
+        InputProps={{
+          readOnly: true,
+        }}
+        value={core.s3Url}
+        margin="normal"
+      />
     </Box>
   );
 };

@@ -1,30 +1,26 @@
 "use client";
-import { httpToSupos } from "@/utils/http";
 import { Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
 function User() {
-  const [userInfo, setUserInfo] = useState("");
-  const router = useRouter();
+  const { user } = useContext(UserContext);
+  const [show, setShow] = useState(false);
 
-  const getUser = async () => {
-    httpToSupos
-      .get("user/current")
-      .then((res) => {
-        console.log(res.data.data);
-        setUserInfo(res.data.data);
-      })
-      .catch((error) => {
-        // It's important to handle errors in promises.
-        console.error("Error fetching user data:", error);
-        setUserInfo("Failed to fetch data");
-        router.push("/login");
-      });
+  const toggle = () => {
+    setShow(!show);
   };
   return (
     <div>
-      <Button onClick={getUser}> click to show user</Button> <p>{userInfo}</p>
+      <Button onClick={toggle}> toggle to show user</Button>
+      {show && (
+        <div>
+          <p>name: {user.name}</p>
+          <p>role: {user.role}</p>
+          <p>id: {user.id}</p>
+        </div>
+      )}
     </div>
   );
 }

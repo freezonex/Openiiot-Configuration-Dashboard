@@ -1,14 +1,11 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 import SideNav from "@/components/Home/SideNav";
+import TopBar from "@/components/Home/TopBar";
 import FlowProvider from "../../utils/flow-provider";
 import { httpToSupos, login } from "@/utils/http";
 
@@ -17,28 +14,49 @@ import UserContext from "@/utils/user-context";
 import { useRouter } from "next/navigation";
 
 const DRAWER_WIDTH = 240;
-
+async function checkOrCreateUser(user) {
+  console.log("check or create user");
+  const res = await fetch("/api/user/" + user.name).then((res) => res.json());
+  console.log(res);
+  if (!res.data) {
+    const body = JSON.stringify(user);
+    const res = await fetch("api/user/create", { method: "POST", body }).then(
+      (res) => res.json()
+    );
+    return res.data;
+  }
+  return res.data;
+}
 export default function Layout({ children }) {
   const [user, setUser] = useState(null);
+
   const router = useRouter();
+  //get user info from supos, fetch or create user in localdb to maintain the related flow info
   useEffect(() => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToSupos
         .get("user/current")
         .then((res) => {
-          console.log(res.data.data);
-          setUser(res.data.data);
+          const userInfoArray = res.data.data
+            .split("-")
+            .map((str) => str.trim());
+          //here cannot setUser and use user in the later part because setUser is async !!
+          const userInfo = { name: userInfoArray[0], role: userInfoArray[1] };
+          console.log(userInfo);
+          return checkOrCreateUser(userInfo);
         })
+        .then((data) => setUser(data))
         .catch((error) => {
           console.error("Error fetching user data:", error);
-          setUser(null);
+          setUserSupos(null);
           router.push("/login");
         });
     } else {
       router.push("/login");
     }
   }, []);
+
   return (
     <React.Fragment>
       <UserContext.Provider
@@ -49,16 +67,6 @@ export default function Layout({ children }) {
         }}
       >
         <ThemeRegistry>
-          <AppBar position="fixed" sx={{ zIndex: 2000 }}>
-            <Toolbar sx={{ backgroundColor: "background.paper" }}>
-              <DashboardIcon
-                sx={{ color: "#444", mr: 2, transform: "translateY(-2px)" }}
-              />
-              <Typography variant="h6" noWrap component="div" color="black">
-                Openiiot Configuration Board
-              </Typography>
-            </Toolbar>
-          </AppBar>
           <FlowProvider>
             <Drawer
               sx={{
@@ -78,7 +86,7 @@ export default function Layout({ children }) {
               <Divider />
               <SideNav />
             </Drawer>
-
+            <TopBar></TopBar>
             <Box
               component="main"
               sx={{
