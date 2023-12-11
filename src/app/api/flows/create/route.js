@@ -2,13 +2,17 @@ import { NextResponse } from "next/server";
 import prisma from "@/db";
 //create a fow
 export const POST = async (req) => {
-  const { flowInfo, edgeInfo, coreInfo, dashboardInfo } = await req.json();
+  const { userInfo, flowInfo, edgeInfo, coreInfo, dashboardInfo } =
+    await req.json();
 
   try {
     const result = await prisma.flow.create({
       data: {
         name: flowInfo.name,
         description: flowInfo.description,
+        user: {
+          connect: { id: userInfo.id },
+        },
         edges: {
           create: edgeInfo.list.map((edge) => ({
             edge: {

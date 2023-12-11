@@ -14,7 +14,7 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
-    "@prisma/client": "^5.6.0",
+    "@prisma/client": "^5.7.0",
     "axios": "^1.6.2",
     "eslint": "latest",
     "eslint-config-next": "latest",
@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "prettier-plugin-prisma": "^5.0.0",
-    "prisma": "^5.6.0"
+    "prisma": "^5.7.0"
   }
 }

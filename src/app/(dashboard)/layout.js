@@ -16,15 +16,11 @@ import { useRouter } from "next/navigation";
 const DRAWER_WIDTH = 240;
 async function checkOrCreateUser(user) {
   console.log("check or create user");
-  const res = await fetch("/api/user/" + user.name).then((res) => res.json());
+  const res = await fetch("/api/user/" + user.name + "/" + user.role).then(
+    (res) => res.json()
+  );
   console.log(res);
-  if (!res.data) {
-    const body = JSON.stringify(user);
-    const res = await fetch("api/user/create", { method: "POST", body }).then(
-      (res) => res.json()
-    );
-    return res.data;
-  }
+
   return res.data;
 }
 export default function Layout({ children }) {
@@ -49,7 +45,6 @@ export default function Layout({ children }) {
         .then((data) => setUser(data))
         .catch((error) => {
           console.error("Error fetching user data:", error);
-          setUserSupos(null);
           router.push("/login");
         });
     } else {

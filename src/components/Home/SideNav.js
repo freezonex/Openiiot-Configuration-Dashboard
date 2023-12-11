@@ -20,6 +20,7 @@ import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddFlow from "./AddFlow";
 import { FlowContext } from "@/utils/flow-provider";
+import UserContext from "@/utils/user-context";
 import { httpToSupos, removeLoginInfo } from "@/utils/http";
 
 const PLACEHOLDER_LINKS = [
@@ -35,12 +36,15 @@ function SideNav() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { refresh, setRefresh } = useContext(FlowContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    fetch("/api/flows")
-      .then((res) => res.json())
-      .then((res) => setData(res.data));
-  }, [refresh]);
+    if (user) {
+      fetch("/api/user/flows/" + user.id)
+        .then((res) => res.json())
+        .then((res) => setData(res.data));
+    }
+  }, [user, refresh]);
 
   const handleClose = () => {
     setOpen(false);

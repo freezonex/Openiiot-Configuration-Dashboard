@@ -1,23 +1,18 @@
 import { NextResponse } from "next/server";
 import prisma from "@/db";
-//Get all the flows
+//get all cores
 export const GET = async () => {
-  const data = await prisma.flow.findMany({
+  const data = await prisma.core.findMany({
     include: {
-      _count: {
-        select: {
-          edges: true,
-        },
-      },
-      user: true,
-      core: true,
-      dashboard: true,
+      belongsTo: true,
     },
   });
 
   return NextResponse.json({
     success: true,
     errorMessage: "",
-    data,
+    data: {
+      list: data,
+    },
   });
 };

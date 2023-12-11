@@ -15,6 +15,7 @@ import DashboardLayout from "@/components/FreeFlowDashboard/DashBoardLayout";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { FlowContext } from "@/utils/flow-provider";
+import UserContext from "@/utils/user-context";
 
 const steps = ["FreeFlow Edge", "FreeFlow Core", "Dashboard"];
 
@@ -32,6 +33,7 @@ const Flow = () => {
   const [coreData, setCoreData] = useState({});
   const [dashboardData, setDashboardData] = useState({});
   const { setRefresh } = useContext(FlowContext);
+  const { user } = useContext(UserContext);
   useEffect(() => {
     if (flowInfo.id) {
       console.log(flowInfo.id);
@@ -61,10 +63,12 @@ const Flow = () => {
     event.preventDefault();
     const body = {
       flowInfo,
+      userInfo: user,
       edgeInfo: { list: edges },
       coreInfo: coreData,
       dashboardInfo: dashboardData,
     };
+    console.log(body);
 
     const response = await fetch("/api/flows/create", {
       method: "POST",

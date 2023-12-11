@@ -27,13 +27,32 @@ export const GET = async (req, { params }) => {
 //Delete an flow
 export const DELETE = async (req, { params }) => {
   const { fid } = params;
-
   await prisma.flowEdgeMap.deleteMany({
     where: { flowId: Number(fid) },
   });
-
   await prisma.flow.delete({
     where: { id: Number(fid) },
+  });
+  await prisma.edge.deleteMany({
+    where: {
+      belongsTo: {
+        none: {},
+      },
+    },
+  });
+  await prisma.core.deleteMany({
+    where: {
+      belongsTo: {
+        none: {},
+      },
+    },
+  });
+  await prisma.dashboard.deleteMany({
+    where: {
+      belongsTo: {
+        none: {},
+      },
+    },
   });
   return NextResponse.json({
     success: true,
