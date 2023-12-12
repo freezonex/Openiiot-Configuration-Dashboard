@@ -10,7 +10,6 @@ export const httpToSupos = axios.create({
 
 httpToSupos.interceptors.request.use(
   (config) => {
-    console.dir(localStorage.getItem("token"));
     // 判断是否存在token，如果存在的话，则每个http header都加上token
     if (Cookies.get("isv_token") != null) {
       config.headers.userToken = Cookies.get("isv_token");

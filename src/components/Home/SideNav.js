@@ -25,7 +25,7 @@ import { httpToSupos, removeLoginInfo } from "@/utils/http";
 
 const PLACEHOLDER_LINKS = [
   // { text: "Settings", icon: SettingsIcon },
-  // { text: "Support", icon: SupportIcon},
+  { text: "EdgePools", icon: SupportIcon },
   { text: "Logout", icon: LogoutIcon, href: "/login" },
 ];
 
@@ -89,6 +89,10 @@ function SideNav() {
     setRefresh({});
   };
 
+  const handleNavToEdgePool = () => {
+    console.log("nav");
+  };
+
   const handleLogout = async () => {
     httpToSupos.get("auth/logout").then((res) => {
       console.log(res);
@@ -136,14 +140,18 @@ function SideNav() {
       </List>
       <Divider sx={{ mt: "auto" }} />
       <List>
-        <ListItem key="Logout" disablePadding>
-          <ListItemButton onClick={handleLogout}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </ListItem>
+        {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton
+              onClick={text === "Logout" ? handleLogout : handleNavToEdgePool}
+            >
+              <ListItemIcon>
+                <Icon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </React.Fragment>
   );
