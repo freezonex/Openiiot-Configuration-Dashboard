@@ -13,8 +13,8 @@ const EdgeCard = (props) => {
   const handleOpenSite = (url) => {
     window.open(url, "_blank");
   };
-  const onDeleteClick = (url) => {
-    handleDeleteItem(url);
+  const onDeleteClick = (url, text) => {
+    handleDeleteItem(url, text);
   };
   return (
     <Card>
@@ -39,7 +39,7 @@ const EdgeCard = (props) => {
       </CardContent>
       <CardActions>
         <Button onClick={() => handleOpenSite(url)}>Go to NodeRed</Button>
-        <Button onClick={() => onDeleteClick(url)}>Delete</Button>
+        <Button onClick={() => onDeleteClick(url, text)}>Delete</Button>
       </CardActions>
     </Card>
   );

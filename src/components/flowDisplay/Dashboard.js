@@ -1,9 +1,17 @@
-import React from "react";
-import { TextField, Typography, Box } from "@mui/material";
+"use client";
+import React, { useState } from "react";
+import { TextField, Typography, Box, Button } from "@mui/material";
 
 const Dashboard = (props) => {
-  const { dashboard } = props;
-
+  const { dashboard, isEdit, updateDashboardData } = props;
+  const [updateData, setUpdateData] = useState(dashboard);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUpdateData({
+      ...updateData,
+      [name]: value,
+    });
+  };
   return (
     <Box
       sx={{
@@ -15,31 +23,46 @@ const Dashboard = (props) => {
     >
       <Typography>Grafana</Typography>
       <TextField
-        name="mqtt_url"
+        name="grafanaUrl"
         InputProps={{
-          readOnly: true,
+          readOnly: isEdit ? false : true,
         }}
-        value={dashboard.grafanaUrl}
+        value={updateData.grafanaUrl}
+        onChange={handleChange}
         margin="normal"
       />
       <Typography sx={{ mt: 2 }}>OODM</Typography>
       <TextField
-        name="tsdbUrl"
+        name="odmUrl"
         InputProps={{
-          readOnly: true,
+          readOnly: isEdit ? false : true,
         }}
-        value={dashboard.odmUrl}
+        value={updateData.odmUrl}
+        onChange={handleChange}
         margin="normal"
       />
       <Typography sx={{ mt: 2 }}>BI</Typography>
       <TextField
-        name="s3_url"
+        name="biUrl"
         InputProps={{
-          readOnly: true,
+          readOnly: isEdit ? false : true,
         }}
-        value={dashboard.biUrl}
+        value={updateData.biUrl}
+        onChange={handleChange}
         margin="normal"
       />
+      {isEdit && (
+        <Button
+          variant="outlined"
+          sx={{ mt: 2 }}
+          onClick={() => {
+            console.log("update clicked");
+            updateDashboardData(updateData);
+          }}
+        >
+          update
+        </Button>
+      )}
     </Box>
   );
 };

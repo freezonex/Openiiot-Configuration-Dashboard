@@ -40,8 +40,8 @@ export default function EdgeLayout(props) {
     setQuery({});
   };
 
-  const handleDeleteItem = (siteAddress) => {
-    handleDeleteEdge(siteAddress);
+  const handleDeleteItem = (siteAddress, siteDescription) => {
+    handleDeleteEdge(siteAddress, siteDescription);
 
     setQuery({});
   };

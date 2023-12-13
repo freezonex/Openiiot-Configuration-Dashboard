@@ -47,8 +47,12 @@ const Flow = () => {
     ]);
   };
 
-  const handleDeleteEdge = (siteAddress) => {
-    setEdges(edges.filter((edge) => edge.url != siteAddress));
+  const handleDeleteEdge = (siteAddress, siteDescription) => {
+    setEdges(
+      edges.filter((edge) => {
+        return edge.url != siteAddress || edge.description != siteDescription;
+      })
+    );
   };
 
   const handleConfirmCoreData = (data) => {

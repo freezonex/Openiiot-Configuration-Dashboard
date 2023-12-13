@@ -34,7 +34,7 @@ model Flow {
 model FlowEdgeMap {
   flow       Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
   flowId     Int
-  edge       Edge     @relation(fields: [edgeId], references: [id])
+  edge       Edge     @relation(fields: [edgeId], references: [id], onDelete: Cascade)
   edgeId     Int
   assignedAt DateTime @default(now())
 
