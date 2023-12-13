@@ -35,19 +35,6 @@ export default function EdgeLayout(props) {
       return;
     }
     handleAddEdge(siteAddress, siteType, siteDescription);
-    // try {
-    //   const body = {
-    //     url: siteAddress,
-    //     type: siteType,
-    //     description: siteDescription,
-    //   };
-    //   await fetch("/api/edges", {
-    //     method: "POST",
-    //     body: JSON.stringify(body),
-    //   }).then((res) => res.json());
-    // } catch (error) {
-    //   console.log(error);
-    // }
 
     setOpen(false);
     setQuery({});
@@ -55,13 +42,7 @@ export default function EdgeLayout(props) {
 
   const handleDeleteItem = (siteAddress) => {
     handleDeleteEdge(siteAddress);
-    // try {
-    //   await fetch("/api/edges/" + id, {
-    //     method: "DELETE",
-    //   }).then((res) => res.json());
-    // } catch (error) {
-    //   console.log(error);
-    // }
+
     setQuery({});
   };
 

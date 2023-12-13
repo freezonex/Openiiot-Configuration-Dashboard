@@ -15,7 +15,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddFlow from "./AddFlow";
@@ -75,6 +74,10 @@ function SideNav() {
     setOpen(false);
   };
 
+  const handleEditFlow = (id) => {
+    router.push(`/flows/${id}?mode=${encodeURIComponent("edit")}`);
+  };
+
   const handleDeleteFlow = async (id) => {
     try {
       await fetch("/api/flows/" + id, {
@@ -123,20 +126,23 @@ function SideNav() {
           alertOpen={alertOpen}
           handleAddFlow={handleAddFlow}
         ></AddFlow>
-        {data.map(({ name, id }) => (
-          <ListItem key={id} disablePadding>
-            <ListItemButton component={Link} href={"/flows/" + id}>
+        {data.map(({ name, id }) => {
+          const href = `/flows/${id}?mode=${encodeURIComponent("view")}`;
+          return (
+            <ListItem key={id} disablePadding>
+              <ListItemButton component={Link} href={href}>
+                <ListItemIcon>
+                  <AccountTreeIcon />
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItemButton>
               <ListItemIcon>
-                <AccountTreeIcon />
+                <EditIcon onClick={() => handleEditFlow(id)}></EditIcon>
+                <DeleteIcon onClick={() => handleDeleteFlow(id)}></DeleteIcon>
               </ListItemIcon>
-              <ListItemText primary={name} />
-            </ListItemButton>
-            <ListItemIcon>
-              <EditIcon></EditIcon>
-              <DeleteIcon onClick={() => handleDeleteFlow(id)}></DeleteIcon>
-            </ListItemIcon>
-          </ListItem>
-        ))}
+            </ListItem>
+          );
+        })}
       </List>
       <Divider sx={{ mt: "auto" }} />
       <List>

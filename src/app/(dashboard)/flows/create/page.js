@@ -194,7 +194,10 @@ const Flow = () => {
               />
             )}
             {activeStep === 1 && (
-              <CoreLayout handleConfirmCoreData={handleConfirmCoreData} />
+              <CoreLayout
+                handleConfirmCoreData={handleConfirmCoreData}
+                core={{}}
+              />
             )}
             {activeStep === 2 && (
               <DashboardLayout

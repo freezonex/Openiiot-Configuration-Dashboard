@@ -5,9 +5,9 @@ import { Alert, TextField, Typography, Box, Button } from "@mui/material";
 import { httpToSupos } from "@/utils/http";
 
 const Core = (props) => {
-  const { core, handleDrawerToggle } = props;
-  const [isConnected, setIsConnected] = useState(false);
-
+  const { isEdit, core, handleDrawerToggle, updateCoreData } = props;
+  const [isConnected, setIsConnected] = useState(null);
+  const [updateData, setUpdateData] = useState(core);
   const handleTestConnection = async () => {
     const data = {
       //extract this
@@ -28,6 +28,14 @@ const Core = (props) => {
         setIsConnected(res.data.successful);
       });
   };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUpdateData({
+      ...updateData,
+      [name]: value,
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -39,11 +47,12 @@ const Core = (props) => {
     >
       <Typography>MQTT Broker</Typography>
       <TextField
-        name="mqtt_url"
+        name="mqttUrl"
         InputProps={{
-          readOnly: true,
+          readOnly: isEdit ? false : true,
         }}
-        value={core.mqttUrl}
+        value={updateData.mqttUrl}
+        onChange={handleChange}
         margin="normal"
       />
       <Box
@@ -55,49 +64,68 @@ const Core = (props) => {
         }}
       >
         <Typography variant="body1">Time Series Database</Typography>
-        <Button
-          variant="outlined"
-          color="success"
-          sx={{ ml: "auto" }}
-          onClick={handleTestConnection}
-        >
-          Test Connection
-        </Button>
-        <Button
-          variant="outlined"
-          color="success"
-          sx={{ ml: 1 }}
-          onClick={handleDrawerToggle}
-        >
-          Console
-        </Button>
+        {!isEdit && (
+          <React.Fragment>
+            <Button
+              variant="outlined"
+              color="success"
+              sx={{ ml: "auto" }}
+              onClick={handleTestConnection}
+            >
+              Test Connection
+            </Button>
+            <Button
+              variant="outlined"
+              color="success"
+              sx={{ ml: 1 }}
+              onClick={handleDrawerToggle}
+            >
+              Console
+            </Button>
+          </React.Fragment>
+        )}
       </Box>
       <TextField
         name="tsdbUrl"
         InputProps={{
-          readOnly: true,
+          readOnly: isEdit ? false : true,
         }}
-        value={core.tsdbUrl}
+        value={updateData.tsdbUrl}
+        onChange={handleChange}
         margin="normal"
       />
-      {isConnected ? (
-        <Alert severity="success" sx={{ mg: 5 }}>
-          Tdengine is successfully connected
-        </Alert>
-      ) : (
-        <Alert severity="error" sx={{ mg: 5 }}>
-          Tdengine is not connected
-        </Alert>
-      )}
+      {isConnected != null &&
+        (isConnected === true ? (
+          <Alert severity="success" sx={{ mg: 5 }}>
+            Tdengine is successfully connected
+          </Alert>
+        ) : (
+          <Alert severity="error" sx={{ mg: 5 }}>
+            Tdengine is not connected
+          </Alert>
+        ))}
       <Typography sx={{ mt: 2 }}>S3</Typography>
       <TextField
-        name="s3_url"
+        name="s3Url"
         InputProps={{
-          readOnly: true,
+          readOnly: isEdit ? false : true,
         }}
-        value={core.s3Url}
+        onChange={handleChange}
+        value={updateData.s3Url}
         margin="normal"
       />
+      {isEdit && (
+        <Button
+          variant="outlined"
+          sx={{ mt: 2 }}
+          onClick={() => {
+            console.log("update clicked");
+            updateCoreData(updateData);
+          }}
+        >
+          update
+        </Button>
+      )}
     </Box>
   );
 };
