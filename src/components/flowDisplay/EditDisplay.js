@@ -11,10 +11,11 @@ import {
   updateDashboard,
   updateFlowInfo,
 } from "@/utils/actions";
+import { useRouter } from "next/navigation";
 
 function EditDisplay(props) {
   const { flow } = props;
-
+  const router = useRouter();
   const updateCoreData = async (updateData) => {
     console.log("updating core...");
     await updateCore(updateData);
@@ -55,6 +56,7 @@ function EditDisplay(props) {
         Once you have finished changing the values in one section, press UPDATE
         button to make it works. Otherwise, no change will be made.
       </Alert>
+
       <Divider sx={{ mb: 2, mt: 2 }}>
         <Chip label="Freeflow Info" />
       </Divider>
@@ -84,6 +86,15 @@ function EditDisplay(props) {
         isEdit={true}
         updateDashboardData={updateDashboardData}
       ></Dashboard>
+      <Button
+        sx={{ mt: 5 }}
+        variant="contained"
+        onClick={() => {
+          router.push(`/flows/${flow.id}?mode=view`);
+        }}
+      >
+        Finsh and go back
+      </Button>
     </Box>
   );
 }

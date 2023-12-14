@@ -23,8 +23,14 @@ function AddFlow(props) {
     e.preventDefault();
 
     handleAddFlow(name, description);
+    setDescription("");
+    setName("");
   };
-
+  const onCancelClick = () => {
+    handleClose();
+    setDescription("");
+    setName("");
+  };
   return (
     <Dialog open={open}>
       <DialogTitle>Add A New Flow</DialogTitle>
@@ -60,7 +66,7 @@ function AddFlow(props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={onCancelClick}>Cancel</Button>
         <Button onClick={onAddClick}>Add</Button>
       </DialogActions>
     </Dialog>
