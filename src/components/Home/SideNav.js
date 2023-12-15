@@ -99,7 +99,8 @@ function SideNav() {
   const handleLogout = async () => {
     httpToSupos.get("auth/logout").then((res) => {
       console.log(res);
-      removeLoginInfo(router);
+      removeLoginInfo();
+      router.push("/login");
     });
   };
   return (

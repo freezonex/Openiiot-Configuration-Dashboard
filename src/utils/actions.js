@@ -2,14 +2,17 @@
 import { unstable_noStore as noStore } from "next/cache";
 import prisma from "@/db";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import envPath from "@/config";
+
 export async function getFlowInfo(id) {
   noStore();
   try {
     console.log("Fetching flow data...");
     await new Promise((resolve) => setTimeout(resolve, 1000));
     let flowInfo = {};
-    await fetch("http://localhost:3000/api/flows/" + id, { method: "GET" })
+    const apiUrl = envPath.ipUrl;
+    console.log(apiUrl);
+    await fetch(`${apiUrl}/api/flows/${id}`, { method: "GET" })
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);

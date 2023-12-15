@@ -103,10 +103,9 @@ export function ridUrlParam(url, aParam) {
 //   );
 // }
 
-export function removeLoginInfo(router) {
+export function removeLoginInfo() {
   sessionStorage.removeItem("isv_token");
   Cookies.remove("isv_token");
-  router.push("/login");
 }
 
 export function login(callback, router) {

@@ -3,9 +3,15 @@ const express = require("express");
 const next = require("next");
 const proxyMiddleware = require("http-proxy-middleware");
 
+const apiUrl =
+  process.env.NEXT_PUBLIC_DOMAIN_ENV === "development"
+    ? "http://localhost"
+    : "http://openiiot-consolemanager-service.openiiot";
+const serverPort = 8085;
+console.log("API URL:", `${apiUrl}:${serverPort}`);
 const devProxy = {
   "/suposapi": {
-    target: "http://localhost:8085", // 端口自己配置合适的
+    target: `${apiUrl}:${serverPort}`, // 端口自己配置合适的
     pathRewrite: {
       "^/suposapi": "/",
     },
@@ -13,7 +19,7 @@ const devProxy = {
   },
 };
 
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = parseInt(process.env.PORT, 10) || 81;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
@@ -42,7 +48,7 @@ app
       if (err) {
         throw err;
       }
-      console.log(`> Ready on http://localhost:${port}`);
+      console.log(`> Ready on ${apiUrl}:${port}`);
     });
   })
   .catch((err) => {

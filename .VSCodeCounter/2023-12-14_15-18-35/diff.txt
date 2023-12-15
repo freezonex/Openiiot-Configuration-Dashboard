@@ -1,0 +1,56 @@
+Date : 2023-12-14 15:18:35
+Directory : /Users/yangyueHelen/Desktop/material-ui-nextjs
+Total : 16 files,  441 codes, -15 comments, 31 blanks, all 457 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |         15 |        427 |        -16 |         29 |        440 |
+| SQL        |          1 |         14 |          1 |          2 |         17 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                 | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                    |         16 |        441 |        -15 |         31 |        457 |
+| prisma                                                                                                               |          1 |         14 |          1 |          2 |         17 |
+| prisma/migrations                                                                                                    |          1 |         14 |          1 |          2 |         17 |
+| prisma/migrations/20231213134419_edge_on_delete_cascade                                                              |          1 |         14 |          1 |          2 |         17 |
+| src                                                                                                                  |         15 |        427 |        -16 |         29 |        440 |
+| src/app                                                                                                              |          4 |       -204 |          2 |         -8 |       -210 |
+| src/app (Files)                                                                                                      |          1 |          6 |          0 |          1 |          7 |
+| src/app/(dashboard)                                                                                                  |          3 |       -210 |          2 |         -9 |       -217 |
+| src/app/(dashboard)/flows                                                                                            |          3 |       -210 |          2 |         -9 |       -217 |
+| src/app/(dashboard)/flows/[id]                                                                                       |          2 |       -217 |          2 |         -9 |       -224 |
+| src/app/(dashboard)/flows/create                                                                                     |          1 |          7 |          0 |          0 |          7 |
+| src/components                                                                                                       |         10 |        494 |        -20 |         24 |        498 |
+| src/components/FreeFlowEdge                                                                                          |          1 |          0 |        -20 |          1 |        -19 |
+| src/components/Home                                                                                                  |          2 |         11 |          0 |          0 |         11 |
+| src/components/flowDisplay                                                                                           |          7 |        483 |          0 |         23 |        506 |
+| src/utils                                                                                                            |          1 |        137 |          2 |         13 |        152 |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                             | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/prisma/migrations/20231213134419_edge_on_delete_cascade/migration.sql | SQL        |         14 |          1 |          2 |         17 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/app/(dashboard)/flows/[id]/loading.js                             | JavaScript |          3 |          1 |          1 |          5 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/app/(dashboard)/flows/[id]/page.js                                | JavaScript |       -220 |          1 |        -10 |       -229 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/app/(dashboard)/flows/create/page.js                              | JavaScript |          7 |          0 |          0 |          7 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/app/page.js                                                       | JavaScript |          6 |          0 |          1 |          7 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/FreeFlowEdge/EdgeLayout.js                             | JavaScript |          0 |        -20 |          1 |        -19 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/Home/AddFlow.js                                        | JavaScript |          6 |          0 |         -1 |          5 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/Home/SideNav.js                                        | JavaScript |          5 |          0 |          1 |          6 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/Core.js                                    | JavaScript |         28 |          0 |          0 |         28 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/Dashboard.js                               | JavaScript |         24 |          0 |         -1 |         23 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/Edge.js                                    | JavaScript |         39 |          0 |         -1 |         38 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/EditDisplay.js                             | JavaScript |         95 |          0 |          8 |        103 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/FlowInfoEdit.js                            | JavaScript |         55 |          0 |          3 |         58 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/TdengineDrawer.js                          | JavaScript |        174 |          0 |          6 |        180 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/components/flowDisplay/ViewDisplay.js                             | JavaScript |         68 |          0 |          8 |         76 |
+| /Users/yangyueHelen/Desktop/material-ui-nextjs/src/utils/actions.js                                                  | JavaScript |        137 |          2 |         13 |        152 |
+| Total                                                                                                                |            |        441 |        -15 |         31 |        457 |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

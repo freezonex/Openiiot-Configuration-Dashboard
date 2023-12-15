@@ -3,9 +3,9 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
-    "build": "next build",
-    "start": "next start",
+    "dev": "NEXT_PUBLIC_DOMAIN_ENV=development node server.js",
+    "build": "NEXT_PUBLIC_DOMAIN_ENV=production next build",
+    "start": "NEXT_PUBLIC_DOMAIN_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {

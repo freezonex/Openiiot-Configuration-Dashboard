@@ -1,0 +1,78 @@
+# Summary
+
+Date : 2023-12-14 15:18:35
+
+Directory /Users/yangyueHelen/Desktop/material-ui-nextjs
+
+Total : 63 files,  8095 codes, 114 comments, 289 blanks, all 8498 lines
+
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Languages
+| language | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| JSON | 2 | 5,104 | 0 | 2 | 5,106 |
+| JavaScript | 49 | 2,749 | 72 | 242 | 3,063 |
+| SQL | 7 | 140 | 31 | 17 | 188 |
+| Prisma | 1 | 55 | 2 | 10 | 67 |
+| XML | 1 | 23 | 0 | 2 | 25 |
+| Markdown | 1 | 17 | 1 | 13 | 31 |
+| JSON with Comments | 1 | 4 | 4 | 0 | 8 |
+| Properties | 1 | 3 | 4 | 3 | 10 |
+
+## Directories
+| path | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| . | 63 | 8,095 | 114 | 289 | 8,498 |
+| . (Files) | 7 | 5,192 | 11 | 27 | 5,230 |
+| prisma | 8 | 195 | 33 | 27 | 255 |
+| prisma (Files) | 1 | 55 | 2 | 10 | 67 |
+| prisma/migrations | 7 | 140 | 31 | 17 | 188 |
+| prisma/migrations/20231124083914_new_test | 1 | 35 | 5 | 6 | 46 |
+| prisma/migrations/20231126162328_optional_core_and_dashboard | 1 | 16 | 7 | 1 | 24 |
+| prisma/migrations/20231130061708_core_and_dashboard_on_delete_cascade | 1 | 16 | 1 | 1 | 18 |
+| prisma/migrations/20231208083455_add_user | 1 | 25 | 8 | 3 | 36 |
+| prisma/migrations/20231211064528_refine_user | 1 | 20 | 8 | 2 | 30 |
+| prisma/migrations/20231211072501_flow_edge_on_delete_cascade | 1 | 14 | 1 | 2 | 17 |
+| prisma/migrations/20231213134419_edge_on_delete_cascade | 1 | 14 | 1 | 2 | 17 |
+| src | 48 | 2,708 | 70 | 235 | 3,013 |
+| src (Files) | 2 | 17 | 3 | 6 | 26 |
+| src/app | 17 | 623 | 24 | 66 | 713 |
+| src/app (Files) | 2 | 23 | 0 | 5 | 28 |
+| src/app/(dashboard) | 6 | 356 | 14 | 40 | 410 |
+| src/app/(dashboard) (Files) | 1 | 95 | 2 | 6 | 103 |
+| src/app/(dashboard)/flows | 4 | 255 | 12 | 31 | 298 |
+| src/app/(dashboard)/flows (Files) | 1 | 6 | 8 | 3 | 17 |
+| src/app/(dashboard)/flows/[id] | 2 | 22 | 2 | 6 | 30 |
+| src/app/(dashboard)/flows/create | 1 | 227 | 2 | 22 | 251 |
+| src/app/(dashboard)/user | 1 | 6 | 0 | 3 | 9 |
+| src/app/(no-layout) | 1 | 6 | 0 | 3 | 9 |
+| src/app/(no-layout)/login | 1 | 6 | 0 | 3 | 9 |
+| src/app/api | 8 | 238 | 10 | 18 | 266 |
+| src/app/api/cores | 1 | 16 | 1 | 2 | 19 |
+| src/app/api/edges | 2 | 36 | 3 | 5 | 44 |
+| src/app/api/edges (Files) | 1 | 23 | 2 | 4 | 29 |
+| src/app/api/edges/[id] | 1 | 13 | 1 | 1 | 15 |
+| src/app/api/flows | 3 | 140 | 4 | 7 | 151 |
+| src/app/api/flows (Files) | 1 | 21 | 1 | 2 | 24 |
+| src/app/api/flows/[fid] | 1 | 57 | 2 | 3 | 62 |
+| src/app/api/flows/create | 1 | 62 | 1 | 2 | 65 |
+| src/app/api/user | 2 | 46 | 2 | 4 | 52 |
+| src/app/api/user/[name] | 1 | 23 | 1 | 2 | 26 |
+| src/app/api/user/[name]/[role] | 1 | 23 | 1 | 2 | 26 |
+| src/app/api/user/flows | 1 | 23 | 1 | 2 | 26 |
+| src/app/api/user/flows/[uid] | 1 | 23 | 1 | 2 | 26 |
+| src/components | 24 | 1,772 | 14 | 129 | 1,915 |
+| src/components (Files) | 3 | 86 | 0 | 9 | 95 |
+| src/components/FreeFlowCore | 1 | 80 | 0 | 6 | 86 |
+| src/components/FreeFlowDashboard | 1 | 80 | 0 | 6 | 86 |
+| src/components/FreeFlowEdge | 3 | 207 | 10 | 19 | 236 |
+| src/components/Home | 5 | 514 | 1 | 34 | 549 |
+| src/components/Login | 1 | 43 | 0 | 4 | 47 |
+| src/components/ThemeRegistry | 3 | 112 | 2 | 15 | 129 |
+| src/components/flowDisplay | 7 | 650 | 1 | 36 | 687 |
+| src/static | 1 | 23 | 0 | 2 | 25 |
+| src/static/image | 1 | 23 | 0 | 2 | 25 |
+| src/utils | 4 | 273 | 29 | 32 | 334 |
+
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
