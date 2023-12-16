@@ -7,7 +7,6 @@ export const httpToSupos = axios.create({
   withCredentials: true,
   timeout: 100000,
 });
-
 httpToSupos.interceptors.request.use(
   (config) => {
     // 判断是否存在token，如果存在的话，则每个http header都加上token
@@ -25,7 +24,6 @@ httpToSupos.interceptors.response.use(
   function (response) {
     if (response.data.code === 401) {
       removeLoginInfo();
-      login();
       return Promise.reject();
     }
     return response;
@@ -33,7 +31,6 @@ httpToSupos.interceptors.response.use(
   function (error) {
     if (error.response.status === 401) {
       removeLoginInfo();
-      login();
       return Promise.reject();
     } else {
       return Promise.reject(error);
@@ -134,11 +131,12 @@ export function login(callback, router) {
               // window.sessionStorage.setItem("isv_token", data);
               Cookies.set("isv_token", data, { expires: 1 });
               console.log("登录信息获取完毕", data);
-              callback();
+              router.push("/flows");
             }
           });
       } else {
         console.log(window.location.href);
+        console.log(process.env.NEXT_PUBLIC_SUPOS_URL);
         router.push(
           `${
             process.env.NEXT_PUBLIC_SUPOS_URL
