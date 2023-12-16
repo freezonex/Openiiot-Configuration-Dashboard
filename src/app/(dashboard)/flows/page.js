@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import OverviewLayout from "@/components/Home/OverviewLayout";
 import UserContext from "@/utils/user-context";
