@@ -12,17 +12,9 @@ import { httpToSupos, login } from "@/utils/http";
 import Cookies from "js-cookie";
 import UserContext from "@/utils/user-context";
 import { useRouter } from "next/navigation";
-
+import { checkOrCreateUser } from "@/utils/actions";
 const DRAWER_WIDTH = 240;
-async function checkOrCreateUser(user) {
-  console.log("check or create user");
-  const res = await fetch("/api/user/" + user.name + "/" + user.role).then(
-    (res) => res.json()
-  );
-  console.log(res);
 
-  return res.data;
-}
 export default function Layout({ children }) {
   const [user, setUser] = useState(null);
 
@@ -40,7 +32,7 @@ export default function Layout({ children }) {
           //here cannot setUser and use user in the later part because setUser is async !!
           const userInfo = { name: userInfoArray[0], role: userInfoArray[1] };
           console.log(userInfo);
-          return checkOrCreateUser(userInfo);
+          return checkOrCreateUser(userInfo.name, userInfo.role);
         })
         .then((data) => setUser(data))
         .catch((error) => {

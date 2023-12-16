@@ -45,6 +45,27 @@ export async function getAllFlow(uid) {
   }
 }
 
+export async function checkOrCreateUser(name, role) {
+  console.log(name, role);
+  try {
+    const user = await prisma.user.upsert({
+      where: {
+        name: name,
+      },
+      update: {
+        name: name,
+      },
+      create: {
+        name: name,
+        role: role,
+      },
+    });
+    return user;
+  } catch (error) {
+    return { message: "Database Error: Failed to Check or create the user ." };
+  }
+}
+
 export async function updateCore(data) {
   try {
     console.log(data);
