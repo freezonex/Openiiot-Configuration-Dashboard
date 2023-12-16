@@ -3,9 +3,9 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "dev": "NEXT_PUBLIC_DOMAIN_ENV=development node server.js",
+    "dev": "NEXT_PUBLIC_DOMAIN_ENV=development PORT=81 next dev",
     "build": "NEXT_PUBLIC_DOMAIN_ENV=production next build",
-    "start": "NEXT_PUBLIC_DOMAIN_ENV=production node server.js",
+    "start": "NEXT_PUBLIC_DOMAIN_ENV=production PORT=81 next start",
     "lint": "next lint"
   },
   "dependencies": {

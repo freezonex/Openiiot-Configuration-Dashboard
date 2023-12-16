@@ -7,6 +7,15 @@ const nextConfig = {
       transform: "@mui/icons-material/{{member}}",
     },
   },
+  async rewrites() {
+    return [
+      {
+        source: "/suposapi/:slug*",
+        destination: `http://openiiot-server-service.openiiot:8085/:slug*`,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {
