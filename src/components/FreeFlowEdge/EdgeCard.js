@@ -5,8 +5,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import NoderedIcon from "../NoderedIcon";
-import NoderedImage from "@/static/image/NoderedPic.png";
+import NoderedIcon from "../Utils/NoderedIcon";
+import NoderedImage from "public/images/NoderedPic.png";
 
 const EdgeCard = (props) => {
   const { heading, text, url, handleDeleteItem } = props;

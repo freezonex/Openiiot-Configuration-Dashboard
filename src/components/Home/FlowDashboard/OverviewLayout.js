@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
-import FlowOverview from "@/components/Home/Overview";
+import FlowOverview from "@/components/Home/FlowDashboard/Overview";
 import { Divider } from "@mui/material";
 import { FlowContext } from "@/utils/flow-provider";
 import UserContext from "@/utils/user-context";

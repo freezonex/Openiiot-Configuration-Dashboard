@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import OverviewLayout from "@/components/Home/OverviewLayout";
+import OverviewLayout from "@/components/Home/FlowDashboard/OverviewLayout";
 import UserContext from "@/utils/user-context";
 
 // async function getFlowData(uid) {

@@ -4,16 +4,16 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
-import SideNav from "@/components/Home/SideNav";
+import SideNav from "@/components/Home/SideNav/SideNav";
 import TopBar from "@/components/Home/TopBar";
 import FlowProvider from "../../utils/flow-provider";
-import { httpToSupos, login } from "@/utils/http";
+import { httpToBackend, login } from "@/utils/http";
 
 import Cookies from "js-cookie";
 import UserContext from "@/utils/user-context";
 import { useRouter } from "next/navigation";
 import { checkOrCreateUser } from "@/utils/actions";
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 340;
 
 export default function Layout({ children }) {
   const [user, setUser] = useState(null);
@@ -23,16 +23,20 @@ export default function Layout({ children }) {
   useEffect(() => {
     const token = Cookies.get("isv_token");
     if (token) {
-      httpToSupos
+      httpToBackend
         .get("user/current")
         .then((res) => {
-          const userInfoArray = res.data.data
-            .split("-")
-            .map((str) => str.trim());
+          console.log(res);
+
           //here cannot setUser and use user in the later part because setUser is async !!
-          const userInfo = { name: userInfoArray[0], role: userInfoArray[1] };
+          const userInfo = {
+            name: res.data.data.username,
+            role: res.data.data.role,
+            tenant_id: res.data.data.tenant_id,
+          };
           console.log(userInfo);
-          return checkOrCreateUser(userInfo.name, userInfo.role);
+          //checkOrCreateUser(userInfo.name, userInfo.role);
+          return userInfo;
         })
         .then((data) => setUser(data))
         .catch((error) => {

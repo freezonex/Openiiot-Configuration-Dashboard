@@ -6,7 +6,7 @@ import EdgeCard from "@/components/FreeFlowEdge/EdgeCard";
 import AddIcon from "@mui/icons-material/Add";
 
 import AddEdgeSite from "./AddEdgeSite";
-import SideNav from "../Home/SideNav";
+import SideNav from "../Home/SideNav/SideNav";
 
 export default function EdgeLayout(props) {
   const { handleAddEdge, edgeList, handleDeleteEdge } = props;

@@ -17,10 +17,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
-import AddFlow from "./AddFlow";
+import AddFlow from "../AddFlow";
+import FlowNav from "./FlowNav";
 import { FlowContext } from "@/utils/flow-provider";
 import UserContext from "@/utils/user-context";
-import { httpToSupos, removeLoginInfo } from "@/utils/http";
+import { httpToBackend, removeLoginInfo } from "@/utils/http";
+import EdgeNav from "./EdgeNav";
+import TenantNav from "./TenantNav";
+import UserNav from "./UserNav";
 
 const PLACEHOLDER_LINKS = [
   // { text: "Settings", icon: SettingsIcon },
@@ -38,11 +42,11 @@ function SideNav() {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (user) {
-      fetch("/api/user/flows/" + user.id)
-        .then((res) => res.json())
-        .then((res) => setData(res.data));
-    }
+    // if (user) {
+    //   fetch("/api/user/flows/" + user.id)
+    //     .then((res) => res.json())
+    //     .then((res) => setData(res.data));
+    // }
   }, [user, refresh]);
 
   const handleClose = () => {
@@ -97,7 +101,7 @@ function SideNav() {
   };
 
   const handleLogout = async () => {
-    httpToSupos.get("auth/logout").then((res) => {
+    httpToBackend.get("auth/logout").then((res) => {
       console.log(res);
       removeLoginInfo();
       router.push("/login");
@@ -105,13 +109,17 @@ function SideNav() {
   };
   return (
     <React.Fragment>
+      <TenantNav></TenantNav>
+      <UserNav></UserNav>
+      <EdgeNav></EdgeNav>
+      <FlowNav data={data}></FlowNav>
       <List>
         <ListItem key={"/flows"} disablePadding>
           <ListItemButton component={Link} href="/flows">
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Flows"></ListItemText>
+            <ListItemText primary="Flow Management"></ListItemText>
           </ListItemButton>
           <ListItemButton
             onClick={() => {
