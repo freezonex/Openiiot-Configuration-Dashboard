@@ -8,10 +8,11 @@ export const httpToBackend = axios.create({
   timeout: 100000,
   transformResponse: [
     function (data) {
+      console.log(data);
       try {
         return JSONbig.parse(data);
       } catch (err) {
-        console.log("转换失败", err);
+        console.log("convertion failed", err);
         return data;
       }
     },
@@ -115,8 +116,25 @@ export function removeLoginInfo() {
   sessionStorage.removeItem("isv_token");
   Cookies.remove("isv_token");
 }
-
-export function login(callback, router) {
+export function login(callback, body) {
+  if (typeof window !== "undefined") {
+    // CSR
+    let token = Cookies.get("isv_token"); //use Cookies instead of session storage
+    if (!token) {
+      httpToBackend.post("/auth/login", body).then((res) => {
+        console.log(res);
+        if (res.data) {
+          Cookies.set("isv_token", res.data.accesstoken, { expires: 1 });
+          console.log("登录信息获取完毕", res.data.accesstoken);
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
+  }
+}
+export function loginWithSupos(callback, router) {
   if (typeof window !== "undefined") {
     // CSR
     let token = Cookies.get("isv_token"); //use Cookies instead of session storage

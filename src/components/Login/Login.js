@@ -15,16 +15,36 @@ import {
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import Logo from "../Utils/Logo";
-import { httpToSupos, login } from "@/utils/http";
+import { login, loginWithSupos } from "@/utils/http";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const [formValues, setFormValues] = useState({
+    tenant_name: "",
+    username: "",
+    password: "",
+  });
   const router = useRouter();
-  const handleLogin = async (event) => {
+  const handleLoginBySupos = async (event) => {
     event.preventDefault();
-    login(() => {
+    loginWithSupos(() => {
       router.push("/flows");
     }, router);
+  };
+
+  const handleValueChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    login(() => {
+      router.push("/users");
+    }, formValues);
   };
 
   return (
@@ -72,9 +92,11 @@ const Login = () => {
           margin="normal"
           required
           fullWidth
-          id="tenant"
-          label="Tenant"
-          name="tenant"
+          id="tenant_name"
+          label="Tenant Name"
+          name="tenant_name"
+          value={formValues.tenant_name}
+          onChange={handleValueChange}
           autoComplete="tenant"
           autoFocus
         />
@@ -84,9 +106,11 @@ const Login = () => {
           margin="normal"
           required
           fullWidth
-          id="email"
+          id="username or email"
           label="User name or email address"
-          name="email"
+          name="username"
+          value={formValues.username}
+          onChange={handleValueChange}
           autoComplete="email"
         />
 
@@ -99,6 +123,8 @@ const Login = () => {
           label="Password"
           type="password"
           id="password"
+          value={formValues.password}
+          onChange={handleValueChange}
           autoComplete="current-password"
         />
 
@@ -129,6 +155,7 @@ const Login = () => {
           variant="contained"
           color="primary"
           sx={{ mt: 3, mb: 2 }}
+          onClick={handleLogin}
         >
           Login
         </Button>
@@ -146,7 +173,7 @@ const Login = () => {
           color="primary"
           startIcon={<LoginIcon />}
           style={{ margin: "24px 0px 16px" }}
-          onClick={handleLogin}
+          onClick={handleLoginBySupos}
         >
           Login with SupOS
         </Button>

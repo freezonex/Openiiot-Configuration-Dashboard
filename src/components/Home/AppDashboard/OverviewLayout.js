@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import EdgeTable from "./EdgeTable";
 import {
   Box,
   TextField,
@@ -13,6 +12,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
+import AppTable from "./AppTable";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
@@ -23,12 +23,12 @@ function OverviewLayout() {
     <Box sx={{ width: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Edges
+          Apps
         </Typography>
         <IconButton color="inherit" onClick={refreshTable}>
           <RefreshIcon />
         </IconButton>
-        <IconButton color="inherit" component={Link} href="/edges/create">
+        <IconButton color="inherit" component={Link} href="/apps/create">
           <AddIcon />
         </IconButton>
         <IconButton color="inherit">
@@ -52,7 +52,7 @@ function OverviewLayout() {
         />
       </Box>
 
-      <EdgeTable refresh={refresh} />
+      <AppTable refresh={refresh} />
     </Box>
   );
 }

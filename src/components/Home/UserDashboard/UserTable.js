@@ -102,7 +102,6 @@ export default function UserTable() {
         .then((data) => setRows(data))
         .catch((error) => {
           console.error("Error fetching user data:", error);
-          router.push("/login");
         });
     } else {
       //router.push("/login");

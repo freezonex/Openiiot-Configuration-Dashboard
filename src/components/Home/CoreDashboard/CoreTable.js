@@ -6,18 +6,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
-export default function EdgeTable({ refresh }) {
+export default function CoreTable({ refresh }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
 
-  const deleteEdge = useCallback(
+  const deleteCore = useCallback(
     (id) => () => {
       console.log(id, typeof id);
       const token = Cookies.get("isv_token");
 
       if (token) {
         httpToBackend
-          .post("edge/delete", { id })
+          .post("core/delete", { id })
           .then((res) => {
             console.log(res);
             setRows((currentRows) =>
@@ -25,10 +25,10 @@ export default function EdgeTable({ refresh }) {
             );
           })
           .catch((error) => {
-            console.error("Error deleting edge:", error);
+            console.error("Error deleting core:", error);
           });
       } else {
-        router.push("/login");
+        //router.push("/login");
       }
     },
     []
@@ -61,28 +61,27 @@ export default function EdgeTable({ refresh }) {
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={deleteEdge(params.id)}
+            onClick={deleteCore(params.id)}
           />,
         ],
       },
     ],
-    [deleteEdge]
+    [deleteCore]
   );
 
-  const fetchEdges = useCallback(() => {
+  const fetchCores = useCallback(() => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
-        .get("edge/get")
+        .get("core/get")
         .then((res) => {
           console.log(res);
-          const edges = res.data.data;
-          console.log(edges);
-          setRows(createRows(edges)); // 直接更新状态
+          const cores = res.data.data;
+          console.log(cores);
+          setRows(createRows(cores)); // 直接更新状态
         })
         .catch((error) => {
-          console.error("Error fetching edge data:", error);
-          router.push("/login");
+          console.error("Error fetching core data:", error);
         });
     } else {
       router.push("/login");
@@ -90,19 +89,19 @@ export default function EdgeTable({ refresh }) {
   }, [router]);
 
   useEffect(() => {
-    fetchEdges();
+    fetchCores();
     console.log("refresh clicked");
-  }, [fetchEdges, refresh]);
+  }, [fetchCores, refresh]);
 
-  function createRows(edges) {
-    const newRows = edges.map((edge) => ({
-      id: edge.id.toString(),
-      name: edge.name,
-      description: edge.description,
-      type: edge.type,
-      url: edge.url,
-      create_time: new Date(edge.create_time),
-      update_time: new Date(edge.update_time),
+  function createRows(cores) {
+    const newRows = cores.map((core) => ({
+      id: core.id.toString(),
+      name: core.name,
+      description: core.description,
+      type: core.type,
+      url: core.url,
+      create_time: new Date(core.create_time),
+      update_time: new Date(core.update_time),
     }));
     return newRows;
   }

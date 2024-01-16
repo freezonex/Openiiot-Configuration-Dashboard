@@ -6,18 +6,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
-export default function EdgeTable({ refresh }) {
+export default function AppTable({ refresh }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
 
-  const deleteEdge = useCallback(
+  const deleteApp = useCallback(
     (id) => () => {
       console.log(id, typeof id);
       const token = Cookies.get("isv_token");
 
       if (token) {
         httpToBackend
-          .post("edge/delete", { id })
+          .post("app/delete", { id })
           .then((res) => {
             console.log(res);
             setRows((currentRows) =>
@@ -25,7 +25,7 @@ export default function EdgeTable({ refresh }) {
             );
           })
           .catch((error) => {
-            console.error("Error deleting edge:", error);
+            console.error("Error deleting core:", error);
           });
       } else {
         router.push("/login");
@@ -61,28 +61,27 @@ export default function EdgeTable({ refresh }) {
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={deleteEdge(params.id)}
+            onClick={deleteApp(params.id)}
           />,
         ],
       },
     ],
-    [deleteEdge]
+    [deleteApp]
   );
 
-  const fetchEdges = useCallback(() => {
+  const fetchApps = useCallback(() => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
-        .get("edge/get")
+        .get("app/get")
         .then((res) => {
           console.log(res);
-          const edges = res.data.data;
-          console.log(edges);
-          setRows(createRows(edges)); // 直接更新状态
+          const apps = res.data.data;
+          console.log(apps);
+          setRows(createRows(apps)); // 直接更新状态
         })
         .catch((error) => {
-          console.error("Error fetching edge data:", error);
-          router.push("/login");
+          console.error("Error fetching app data:", error);
         });
     } else {
       router.push("/login");
@@ -90,19 +89,19 @@ export default function EdgeTable({ refresh }) {
   }, [router]);
 
   useEffect(() => {
-    fetchEdges();
+    fetchApps();
     console.log("refresh clicked");
-  }, [fetchEdges, refresh]);
+  }, [fetchApps, refresh]);
 
-  function createRows(edges) {
-    const newRows = edges.map((edge) => ({
-      id: edge.id.toString(),
-      name: edge.name,
-      description: edge.description,
-      type: edge.type,
-      url: edge.url,
-      create_time: new Date(edge.create_time),
-      update_time: new Date(edge.update_time),
+  function createRows(apps) {
+    const newRows = apps.map((app) => ({
+      id: app.id.toString(),
+      name: app.name,
+      description: app.description,
+      type: app.type,
+      url: app.url,
+      create_time: new Date(app.create_time),
+      update_time: new Date(app.update_time),
     }));
     return newRows;
   }

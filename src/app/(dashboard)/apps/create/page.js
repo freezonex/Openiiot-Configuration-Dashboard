@@ -12,11 +12,7 @@ import { useRouter } from "next/navigation";
 import { httpToBackend } from "@/utils/http";
 import UserContext from "@/utils/user-context";
 
-const edgeTypes = [
-  { value: "NodeRed" },
-  { value: "Rest API" },
-  { value: "PG/Mysql" },
-];
+const appTypes = [{ value: "Grafana" }, { value: "ODM" }, { value: "BI" }];
 function page() {
   const [formValues, setFormValues] = useState({
     name: "",
@@ -38,7 +34,7 @@ function page() {
   };
 
   const handleBack = () => {
-    router.push("/edges");
+    router.push("/apps");
   };
   const isRequiredFieldEmpty = () => {
     const requiredFields = ["name", "type", "url"];
@@ -47,7 +43,7 @@ function page() {
       return fieldValue.trim() === "";
     });
   };
-  const handleAddSite = (event) => {
+  const handleAddCore = (event) => {
     event.preventDefault();
     if (isRequiredFieldEmpty()) {
       setAlertOpen(true);
@@ -66,13 +62,13 @@ function page() {
       };
       console.log(body);
       httpToBackend
-        .post("/edge/add", body)
+        .post("/app/add", body)
         .then((res) => {
           console.log(res);
         })
-        .then(router.push("/edges"))
+        .then(router.push("/apps"))
         .catch((error) => {
-          console.error("Create Edge failed", error);
+          console.error("Create Core failed", error);
         });
     }
   };
@@ -91,7 +87,7 @@ function page() {
         back
       </Button>
       <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
-        Create New Edge Site
+        Create New App Component
       </Typography>
       {alertOpen && isRequiredFieldEmpty() && (
         <Alert severity="error">Please fill in all the required fields.</Alert>
@@ -108,7 +104,7 @@ function page() {
         helperText="Please select the type of your edge site"
         variant="standard"
       >
-        {edgeTypes.map((option) => (
+        {appTypes.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.value}
           </MenuItem>
@@ -133,7 +129,7 @@ function page() {
         margin="dense"
         id="url"
         name="url"
-        label="Site URL"
+        label="Core URL"
         type="url"
         value={formValues.url}
         onChange={handleValueChange}
@@ -158,7 +154,7 @@ function page() {
         margin="dense"
         id="username"
         name="username"
-        label="User Name (Nodered)"
+        label="User Name (Core component)"
         type="text"
         value={formValues.username}
         onChange={handleValueChange}
@@ -171,7 +167,7 @@ function page() {
         margin="dense"
         id="password"
         name="password"
-        label="Password (Nodered)"
+        label="Password (Core component)"
         type="password"
         value={formValues.password}
         onChange={handleValueChange}
@@ -186,7 +182,7 @@ function page() {
           justifyContent: "end",
         }}
       >
-        <Button onClick={handleAddSite}>create</Button>
+        <Button onClick={handleAddCore}>create</Button>
       </Box>
     </Box>
   );

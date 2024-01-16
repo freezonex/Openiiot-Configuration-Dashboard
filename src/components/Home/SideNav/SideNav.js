@@ -25,6 +25,8 @@ import { httpToBackend, removeLoginInfo } from "@/utils/http";
 import EdgeNav from "./EdgeNav";
 import TenantNav from "./TenantNav";
 import UserNav from "./UserNav";
+import CoreNav from "./CoreNav";
+import AppNav from "./AppNav";
 
 const PLACEHOLDER_LINKS = [
   // { text: "Settings", icon: SettingsIcon },
@@ -112,6 +114,8 @@ function SideNav() {
       <TenantNav></TenantNav>
       <UserNav></UserNav>
       <EdgeNav></EdgeNav>
+      <CoreNav></CoreNav>
+      <AppNav></AppNav>
       <FlowNav data={data}></FlowNav>
       <List>
         <ListItem key={"/flows"} disablePadding>
