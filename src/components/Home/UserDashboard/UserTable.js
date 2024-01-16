@@ -111,7 +111,7 @@ export default function UserTable() {
 
   function createRows(users) {
     const newRows = users.map((user) => ({
-      id: user.id.toString(),
+      id: BigInt(user.id.toString()),
       name: user.username,
       description: user.description,
       role: user.role,
