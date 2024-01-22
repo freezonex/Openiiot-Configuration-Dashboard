@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Cookies from "js-cookie";
 import { httpToBackend } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
@@ -67,6 +68,13 @@ export default function AppTable({
             label="Delete"
             onClick={deleteApp(params.id)}
           />,
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            onClick={() => {
+              router.push(`/apps/edit/${params.row.id}`);
+            }}
+          />,
         ],
       },
     ],
@@ -129,6 +137,7 @@ export default function AppTable({
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        autoHeight={true}
         pageSizeOptions={[5, 10]}
         checkboxSelection
         rowSelectionModel={selectionModel}

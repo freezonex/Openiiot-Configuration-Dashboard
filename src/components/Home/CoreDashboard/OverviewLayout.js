@@ -16,6 +16,10 @@ import CoreTable from "./CoreTable";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
+  const [cores, setCores] = useState([]);
+  const handleSelectCore = (coreIds) => {
+    setCores(coreIds);
+  };
   const refreshTable = () => {
     setRefresh({});
   };
@@ -52,7 +56,11 @@ function OverviewLayout() {
         />
       </Box>
 
-      <CoreTable refresh={refresh} />
+      <CoreTable
+        refresh={refresh}
+        onSelectionChange={handleSelectCore}
+        setlectedRowIds={cores}
+      />
     </Box>
   );
 }

@@ -13,7 +13,6 @@ export default function FlowTable({
 }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
-  console.log(selectedRowIds);
   const deleteFlow = useCallback(
     (id) => () => {
       console.log(id, typeof id);
@@ -131,6 +130,7 @@ export default function FlowTable({
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        autoHeight={true}
         pageSizeOptions={[5, 10]}
         checkboxSelection
         rowSelectionModel={selectionModel}

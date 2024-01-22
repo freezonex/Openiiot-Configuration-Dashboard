@@ -115,46 +115,6 @@ function SideNav() {
       <CoreNav></CoreNav>
       <AppNav></AppNav>
       <FlowNav data={data}></FlowNav>
-      <List>
-        <ListItem key={"/flows"} disablePadding>
-          <ListItemButton component={Link} href="/flows">
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Flow Management"></ListItemText>
-          </ListItemButton>
-          <ListItemButton
-            onClick={() => {
-              setOpen(true);
-            }}
-          >
-            <AddIcon />
-          </ListItemButton>
-        </ListItem>
-        <AddFlow
-          open={open}
-          handleClose={handleClose}
-          alertOpen={alertOpen}
-          handleAddFlow={handleAddFlow}
-        ></AddFlow>
-        {data.map(({ name, id }) => {
-          const href = `/flows/${id}?mode=${encodeURIComponent("view")}`;
-          return (
-            <ListItem key={id} disablePadding>
-              <ListItemButton component={Link} href={href}>
-                <ListItemIcon>
-                  <AccountTreeIcon />
-                </ListItemIcon>
-                <ListItemText primary={name} />
-              </ListItemButton>
-              <ListItemIcon>
-                <EditIcon onClick={() => handleEditFlow(id)}></EditIcon>
-                <DeleteIcon onClick={() => handleDeleteFlow(id)}></DeleteIcon>
-              </ListItemIcon>
-            </ListItem>
-          );
-        })}
-      </List>
       <Divider sx={{ mt: "auto" }} />
       <List>
         {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (

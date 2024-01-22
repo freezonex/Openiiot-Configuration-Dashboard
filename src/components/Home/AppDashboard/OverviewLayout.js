@@ -16,6 +16,10 @@ import AppTable from "./AppTable";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
+  const [apps, setApps] = useState([]);
+  const handleSelectApp = (appIds) => {
+    setApps(appIds);
+  };
   const refreshTable = () => {
     setRefresh({});
   };
@@ -52,7 +56,11 @@ function OverviewLayout() {
         />
       </Box>
 
-      <AppTable refresh={refresh} />
+      <AppTable
+        refresh={refresh}
+        onSelectionChange={handleSelectApp}
+        selectedRowIds={apps}
+      />
     </Box>
   );
 }

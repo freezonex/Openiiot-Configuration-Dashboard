@@ -137,6 +137,7 @@ export default function UserTable({ refresh }) {
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        autoHeight={true}
         pageSizeOptions={[5, 10]}
         checkboxSelection
       />

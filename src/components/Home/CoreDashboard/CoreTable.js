@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Cookies from "js-cookie";
 import { httpToBackend } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
@@ -52,7 +53,7 @@ export default function CoreTable({
     () => [
       { field: "name", headerName: "Name", width: 160 },
       { field: "description", headerName: "Description", width: 180 },
-      { field: "url", headerName: "URL", width: 200 },
+      { field: "url", headerName: "URL", width: 250 },
       { field: "type", headerName: "Type", width: 90 },
       {
         field: "update_time",
@@ -76,6 +77,13 @@ export default function CoreTable({
             icon={<DeleteIcon />}
             label="Delete"
             onClick={deleteCore(params.id)}
+          />,
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            onClick={() => {
+              router.push(`/cores/edit/${params.row.id}`);
+            }}
           />,
         ],
       },
@@ -129,6 +137,7 @@ export default function CoreTable({
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        autoHeight={true}
         pageSizeOptions={[5, 10]}
         checkboxSelection
         rowSelectionModel={selectionModel}
