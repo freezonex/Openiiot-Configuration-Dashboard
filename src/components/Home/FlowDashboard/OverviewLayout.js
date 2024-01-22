@@ -1,41 +1,68 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
-import Box from "@mui/material/Box";
-import FlowOverview from "@/components/Home/FlowDashboard/Overview";
-import { Divider } from "@mui/material";
-import { FlowContext } from "@/utils/flow-provider";
-import UserContext from "@/utils/user-context";
+import React, { useState } from "react";
+import {
+  Box,
+  TextField,
+  InputAdornment,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import AddIcon from "@mui/icons-material/Add";
+import Link from "next/link";
+import FlowTable from "./FlowTable";
 
-const OverviewLayout = ({}) => {
-  const { refresh } = useContext(FlowContext);
-  const { user } = useContext(UserContext);
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    if (user) {
-      fetch("/api/user/flows/" + user.id)
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-          setData(res.data);
-        });
-    }
-  }, [refresh, user]);
+function OverviewLayout() {
+  const [refresh, setRefresh] = useState({});
+  const [flows, setFlows] = useState([]);
+  const handleSelectFlow = (flowIds) => {
+    setFlows(flowIds);
+  };
+  const refreshTable = () => {
+    setRefresh({});
+  };
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {data.map(({ id, name, description, _count, core, dashboard }) => (
-        <React.Fragment key={id}>
-          <FlowOverview
-            flowName={name}
-            flowDescription={description}
-            edgeCount={_count.edges}
-            core={core}
-            dashboard={dashboard}
-          />
-          <Divider sx={{ mt: 2 }} />
-        </React.Fragment>
-      ))}
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Flows
+        </Typography>
+        <IconButton color="inherit" onClick={refreshTable}>
+          <RefreshIcon />
+        </IconButton>
+        <IconButton color="inherit" component={Link} href="/edges/create">
+          <AddIcon />
+        </IconButton>
+        <IconButton color="inherit">
+          <MoreVertIcon />
+        </IconButton>
+      </Box>
+      <Box sx={{ width: "50%", mt: 2, mb: 2 }}>
+        <TextField
+          fullWidth
+          id="search"
+          type="search"
+          label="Search"
+          variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
+
+      <FlowTable
+        refresh={refresh}
+        onSelectionChange={handleSelectFlow}
+        selectedRowIds={flows}
+      />
     </Box>
   );
-};
+}
 
 export default OverviewLayout;

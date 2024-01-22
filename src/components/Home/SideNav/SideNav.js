@@ -29,8 +29,6 @@ import CoreNav from "./CoreNav";
 import AppNav from "./AppNav";
 
 const PLACEHOLDER_LINKS = [
-  // { text: "Settings", icon: SettingsIcon },
-  { text: "EdgePools", icon: SupportIcon },
   { text: "Logout", icon: LogoutIcon, href: "/login" },
 ];
 
