@@ -11,6 +11,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import SendIcon from "@mui/icons-material/Send";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -50,6 +53,18 @@ export default function FlowNav({ data }) {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }} component={Link} href="/flows/create">
+            <ListItemIcon>
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create Flow" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }} component={Link} href="/flows">
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Flows" />
+          </ListItemButton>
           {data.map(({ name, id }) => {
             const href = `/flows/${id}?mode=${encodeURIComponent("view")}`;
             return (

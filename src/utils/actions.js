@@ -3,7 +3,47 @@ import { unstable_noStore as noStore } from "next/cache";
 import prisma from "@/db";
 import { revalidatePath } from "next/cache";
 import envPath from "@/config";
+import JSONbig from "json-bigint";
+import axios from "axios";
+import Cookies from "js-cookie";
 
+const serverUrl = envPath.serverUrl;
+
+export const httpToBackendAtServer = axios.create({
+  baseURL: serverUrl,
+  withCredentials: true,
+  timeout: 100000,
+  transformResponse: [
+    async function (data) {
+      try {
+        return JSONbig.parse(data);
+      } catch (err) {
+        console.log("convertion failed", err);
+        return data;
+      }
+    },
+  ],
+});
+
+export async function getEdges(token) {
+  noStore();
+  try {
+    console.log("Fetching edge data...");
+    //await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const response = await httpToBackendAtServer.get("edge/get", {
+      headers: { userToken: token },
+    });
+
+    return response.data.data;
+    //const resposne = await httpToBackend.get("edge/get");
+
+    console.log("Data fetch completed after 1 seconds.");
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch the latest edges.");
+  }
+}
 export async function getFlowInfo(id) {
   noStore();
   try {

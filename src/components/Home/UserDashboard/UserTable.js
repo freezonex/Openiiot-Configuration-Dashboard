@@ -3,12 +3,11 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SecurityIcon from "@mui/icons-material/Security";
 import { httpToBackend } from "@/utils/http";
 import { useRouter } from "next/navigation";
-import { keyframes } from "@emotion/react";
+import EditIcon from "@mui/icons-material/Edit";
 
-export default function UserTable() {
+export default function UserTable({ refresh }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
 
@@ -30,7 +29,7 @@ export default function UserTable() {
             console.error("Error deleting user:", error);
           });
       } else {
-        //router.push("/login");
+        router.push("/login");
       }
     },
     []
@@ -77,10 +76,11 @@ export default function UserTable() {
             onClick={deleteUser(params.id)}
           />,
           <GridActionsCellItem
-            icon={<SecurityIcon />}
-            label="Toggle Admin"
-            onClick={toggleAdmin(params.id)}
-            showInMenu
+            icon={<EditIcon />}
+            label="Edit"
+            onClick={() => {
+              router.push(`/users/edit/${params.row.name}`);
+            }}
           />,
         ],
       },
@@ -88,7 +88,7 @@ export default function UserTable() {
     [deleteUser, toggleAdmin]
   );
 
-  useEffect(() => {
+  const fetchUsers = useCallback(() => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
@@ -104,13 +104,18 @@ export default function UserTable() {
           console.error("Error fetching user data:", error);
         });
     } else {
-      //router.push("/login");
+      router.push("/login");
     }
-  }, [deleteUser]);
+  }, [router]);
+
+  useEffect(() => {
+    fetchUsers();
+    console.log("refresh clicked");
+  }, [fetchUsers, deleteUser, refresh]);
 
   function createRows(users) {
     const newRows = users.map((user) => ({
-      id: BigInt(user.id.toString()),
+      id: user.id.toString(),
       name: user.username,
       description: user.description,
       role: user.role,

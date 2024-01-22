@@ -6,10 +6,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
-export default function EdgeTable({ refresh }) {
+export default function EdgeTable({
+  refresh,
+  onSelectionChange,
+  selectedRowIds,
+}) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
-
+  console.log(selectedRowIds);
   const deleteEdge = useCallback(
     (id) => () => {
       console.log(id, typeof id);
@@ -33,6 +37,17 @@ export default function EdgeTable({ refresh }) {
     },
     []
   );
+  const [selectionModel, setSelectionModel] = useState(selectedRowIds);
+
+  useEffect(() => {
+    setSelectionModel(selectedRowIds);
+  }, [selectedRowIds]);
+  useEffect(() => {
+    onSelectionChange(selectionModel);
+  }, [selectionModel, onSelectionChange]);
+  const handleSelectionModelChange = (newSelectionModel) => {
+    setSelectionModel(newSelectionModel);
+  };
 
   const columns = useMemo(
     () => [
@@ -69,15 +84,13 @@ export default function EdgeTable({ refresh }) {
     [deleteEdge]
   );
 
-  const fetchEdges = useCallback(() => {
+  const fetchEdges = useCallback(async () => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
         .get("edge/get")
         .then((res) => {
-          console.log(res);
           const edges = res.data.data;
-          console.log(edges);
           setRows(createRows(edges)); // 直接更新状态
         })
         .catch((error) => {
@@ -91,7 +104,6 @@ export default function EdgeTable({ refresh }) {
 
   useEffect(() => {
     fetchEdges();
-    console.log("refresh clicked");
   }, [fetchEdges, refresh]);
 
   function createRows(edges) {
@@ -118,6 +130,8 @@ export default function EdgeTable({ refresh }) {
         }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={handleSelectionModelChange}
       />
     </div>
   );

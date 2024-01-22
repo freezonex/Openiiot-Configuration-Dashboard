@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import TenantTable from "./TenantTable";
 import {
   Box,
@@ -14,6 +15,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 
 function OverviewLayout() {
+  const [refresh, setRefresh] = useState({});
+  const refreshTable = () => {
+    setRefresh({});
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -21,7 +26,7 @@ function OverviewLayout() {
           Tenants
         </Typography>
         <IconButton color="inherit">
-          <RefreshIcon />
+          <RefreshIcon onClick={refreshTable} />
         </IconButton>
         <IconButton color="inherit" component={Link} href="/tenants/create">
           <AddIcon />
@@ -47,7 +52,7 @@ function OverviewLayout() {
         />
       </Box>
 
-      <TenantTable />
+      <TenantTable refresh={refresh} />
     </Box>
   );
 }

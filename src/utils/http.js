@@ -8,7 +8,6 @@ export const httpToBackend = axios.create({
   timeout: 100000,
   transformResponse: [
     function (data) {
-      console.log(data);
       try {
         return JSONbig.parse(data);
       } catch (err) {
@@ -113,7 +112,7 @@ export function ridUrlParam(url, aParam) {
 // }
 
 export function removeLoginInfo() {
-  sessionStorage.removeItem("isv_token");
+  //sessionStorage.removeItem("isv_token");
   Cookies.remove("isv_token");
 }
 export function login(callback, body) {

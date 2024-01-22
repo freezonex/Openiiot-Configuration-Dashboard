@@ -16,6 +16,10 @@ import Link from "next/link";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
+  const [edges, setEdges] = useState([]);
+  const handleSelectEdge = (edgeIds) => {
+    setEdges(edgeIds);
+  };
   const refreshTable = () => {
     setRefresh({});
   };
@@ -52,7 +56,11 @@ function OverviewLayout() {
         />
       </Box>
 
-      <EdgeTable refresh={refresh} />
+      <EdgeTable
+        refresh={refresh}
+        onSelectionChange={handleSelectEdge}
+        selectedRowIds={edges}
+      />
     </Box>
   );
 }

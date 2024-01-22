@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Box,
   TextField,
@@ -14,6 +15,10 @@ import Link from "next/link";
 import UserTable from "./UserTable";
 
 function OverviewLayout() {
+  const [refresh, setRefresh] = useState({});
+  const refreshTable = () => {
+    setRefresh({});
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -21,7 +26,7 @@ function OverviewLayout() {
           Users
         </Typography>
         <IconButton color="inherit">
-          <RefreshIcon />
+          <RefreshIcon onClick={refreshTable} />
         </IconButton>
         <IconButton color="inherit" component={Link} href="/users/create">
           <AddIcon />
@@ -47,7 +52,7 @@ function OverviewLayout() {
         />
       </Box>
 
-      <UserTable />
+      <UserTable refresh={refresh} />
     </Box>
   );
 }

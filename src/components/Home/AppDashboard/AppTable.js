@@ -6,7 +6,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
-export default function AppTable({ refresh }) {
+export default function AppTable({
+  refresh,
+  onSelectionChange,
+  selectedRowIds,
+}) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
 
@@ -92,7 +96,17 @@ export default function AppTable({ refresh }) {
     fetchApps();
     console.log("refresh clicked");
   }, [fetchApps, refresh]);
+  const [selectionModel, setSelectionModel] = useState(selectedRowIds);
 
+  useEffect(() => {
+    setSelectionModel(selectedRowIds);
+  }, [selectedRowIds]);
+  useEffect(() => {
+    onSelectionChange(selectionModel);
+  }, [selectionModel, onSelectionChange]);
+  const handleSelectionModelChange = (newSelectionModel) => {
+    setSelectionModel(newSelectionModel);
+  };
   function createRows(apps) {
     const newRows = apps.map((app) => ({
       id: app.id.toString(),
@@ -117,6 +131,8 @@ export default function AppTable({ refresh }) {
         }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={handleSelectionModelChange}
       />
     </div>
   );

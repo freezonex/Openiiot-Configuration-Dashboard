@@ -6,10 +6,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
-export default function CoreTable({ refresh }) {
+export default function CoreTable({
+  refresh,
+  onSelectionChange,
+  selectedRowIds,
+}) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
+  const [selectionModel, setSelectionModel] = useState(selectedRowIds);
 
+  useEffect(() => {
+    setSelectionModel(selectedRowIds);
+  }, [selectedRowIds]);
+  useEffect(() => {
+    onSelectionChange(selectionModel);
+  }, [selectionModel, onSelectionChange]);
+  const handleSelectionModelChange = (newSelectionModel) => {
+    setSelectionModel(newSelectionModel);
+  };
   const deleteCore = useCallback(
     (id) => () => {
       console.log(id, typeof id);
@@ -117,6 +131,8 @@ export default function CoreTable({ refresh }) {
         }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={handleSelectionModelChange}
       />
     </div>
   );

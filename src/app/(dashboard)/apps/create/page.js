@@ -43,7 +43,7 @@ function page() {
       return fieldValue.trim() === "";
     });
   };
-  const handleAddCore = (event) => {
+  const handleAddApp = (event) => {
     event.preventDefault();
     if (isRequiredFieldEmpty()) {
       setAlertOpen(true);
@@ -182,7 +182,7 @@ function page() {
           justifyContent: "end",
         }}
       >
-        <Button onClick={handleAddCore}>create</Button>
+        <Button onClick={handleAddApp}>create</Button>
       </Box>
     </Box>
   );
