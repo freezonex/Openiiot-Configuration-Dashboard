@@ -60,6 +60,7 @@ function OverviewLayout() {
         refresh={refresh}
         onSelectionChange={handleSelectEdge}
         selectedRowIds={edges}
+        enableSlection={true}
       />
     </Box>
   );

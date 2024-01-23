@@ -6,7 +6,7 @@ import Edge from "@/components/flowDisplay/Edge";
 import Core from "@/components/flowDisplay/Core";
 import Dashboard from "@/components/flowDisplay/Dashboard";
 import theme from "@/components/ThemeRegistry/theme";
-import TdengineDrawer from "@/components/flowDisplay/TdengineDrawer";
+import TdengineDrawer from "../Home/CoreDashboard/TdengineDrawer";
 
 const drawerWidth = 320;
 

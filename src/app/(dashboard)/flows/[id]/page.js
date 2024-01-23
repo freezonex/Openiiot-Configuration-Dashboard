@@ -6,6 +6,7 @@ import EditDisplay from "@/components/flowDisplay/EditDisplay";
 import { getFlowInfo } from "@/utils/actions";
 import Loading from "./loading";
 import { Suspense } from "react";
+import FlowDetails from "@/components/Home/FlowDashboard/FlowDetails";
 
 async function page({ params, searchParams }) {
   const id = params.id;
@@ -15,8 +16,7 @@ async function page({ params, searchParams }) {
   //return <div></div>;
   return (
     <Suspense>
-      {mode === "view" && <ViewDisplay flow={flow} />}
-      {mode === "edit" && <EditDisplay flow={flow} />}
+      <FlowDetails id={id}></FlowDetails>
     </Suspense>
   );
 }

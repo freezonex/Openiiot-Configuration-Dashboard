@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Cookies from "js-cookie";
-import { httpToBackend } from "@/utils/http";
+import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
 
@@ -79,6 +80,14 @@ export default function FlowTable({
             label="Delete"
             onClick={deleteFlow(params.id)}
           />,
+          <GridActionsCellItem
+            icon={<EditNoteIcon />}
+            label="View Details"
+            onClick={() => {
+              router.push(`/flows/${params.id}`);
+            }}
+            showInMenu
+          />,
         ],
       },
     ],
@@ -98,10 +107,12 @@ export default function FlowTable({
           console.error("Error fetching flow data:", error);
         });
     } else {
-      router.push("/login");
+      logout(router);
     }
   }, [router]);
-
+  const handleRowClick = (params) => {
+    router.push(`/flows/${params.id}`);
+  };
   useEffect(() => {
     fetchFlows();
   }, [fetchFlows, refresh]);
@@ -133,6 +144,7 @@ export default function FlowTable({
         autoHeight={true}
         pageSizeOptions={[5, 10]}
         checkboxSelection
+        onRowClick={handleRowClick}
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleSelectionModelChange}
       />

@@ -17,12 +17,14 @@ import FlowTable from "./FlowTable";
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [flows, setFlows] = useState([]);
+
   const handleSelectFlow = (flowIds) => {
     setFlows(flowIds);
   };
   const refreshTable = () => {
     setRefresh({});
   };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -32,7 +34,7 @@ function OverviewLayout() {
         <IconButton color="inherit" onClick={refreshTable}>
           <RefreshIcon />
         </IconButton>
-        <IconButton color="inherit" component={Link} href="/edges/create">
+        <IconButton color="inherit" component={Link} href="/flows/create">
           <AddIcon />
         </IconButton>
         <IconButton color="inherit">

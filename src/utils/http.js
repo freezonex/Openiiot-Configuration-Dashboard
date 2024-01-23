@@ -133,6 +133,13 @@ export function login(callback, body) {
     }
   }
 }
+export function logout(router) {
+  httpToBackend.get("auth/logout").then((res) => {
+    console.log(res);
+    removeLoginInfo();
+    router.push("/login");
+  });
+}
 export function loginWithSupos(callback, router) {
   if (typeof window !== "undefined") {
     // CSR

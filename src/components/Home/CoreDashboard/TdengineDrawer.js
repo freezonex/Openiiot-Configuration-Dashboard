@@ -10,15 +10,40 @@ import {
   Tooltip,
   Divider,
   Chip,
+  IconButton,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { httpToSupos } from "@/utils/http";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
+import { httpToBackend } from "@/utils/http";
+import { BlackButton } from "@/components/Utils/BlackButton";
 
 function TdengineDrawer(props) {
-  const { open, tdengineUrl, drawerWidth } = props;
+  const { open, tdengineUrl, drawerWidth, handleDrawerOpenStatus } = props;
+  const [isConnected, setIsConnected] = useState(false);
   const [execSqlValue, setExecSqlValue] = useState("");
   const [querySqlValue, setQuerySqlValue] = useState("");
   const [sqlResponse, setSqlResponse] = useState("");
+  const handleTestConnection = async () => {
+    const data = {
+      dsn: {
+        host: tdengineUrl,
+        username: "root",
+        password: "taosdata",
+      },
+    };
+    console.log(data);
+    await httpToBackend
+      .post("/tdengine/testconnection", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setIsConnected(res.data.successful);
+      });
+  };
   const handleSubmitSql = async (event) => {
     const { name } = event.target;
     console.log(name);
@@ -31,7 +56,7 @@ function TdengineDrawer(props) {
     };
     if (name == "querySql") {
       data.sql = querySqlValue;
-      await httpToSupos
+      await httpToBackend
         .post("/tdengine/query", data, {
           headers: {
             "Content-Type": "application/json",
@@ -43,7 +68,7 @@ function TdengineDrawer(props) {
         });
     } else if (name == "execSql") {
       data.sql = execSqlValue;
-      await httpToSupos
+      await httpToBackend
         .post("/tdengine/batchexec", data, {
           headers: {
             "Content-Type": "application/json",
@@ -61,6 +86,7 @@ function TdengineDrawer(props) {
     setQuerySqlValue("");
     setSqlResponse("");
   };
+  console.log(tdengineUrl);
 
   const handleQueryChange = (event) => {
     const { name } = event.target;
@@ -92,10 +118,36 @@ function TdengineDrawer(props) {
         <ListItem
           disablePadding
           sx={{ display: "flex", justifyContent: "center" }}
+          secondaryAction={
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={() => handleDrawerOpenStatus()}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
         >
           <Typography variant="overline" sx={{ fontWeight: 500 }}>
             Tdengine Console Pannel
           </Typography>
+        </ListItem>
+        <ListItem sx={{ width: "100%" }}>
+          <Typography variant="overline" sx={{ fontWeight: 400 }}>
+            Remote: {tdengineUrl}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ display: "flex", justifyContent: "space-between" }}>
+          <BlackButton onClick={handleTestConnection}>
+            test connection
+          </BlackButton>
+          <IconButton>
+            {isConnected ? (
+              <CheckIcon color="success"></CheckIcon>
+            ) : (
+              <CloseIcon color="error"></CloseIcon>
+            )}
+          </IconButton>
         </ListItem>
         <ListItem>
           <TextField

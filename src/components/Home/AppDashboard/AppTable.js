@@ -11,6 +11,8 @@ export default function AppTable({
   refresh,
   onSelectionChange,
   selectedRowIds,
+  enableSlection,
+  filteredRows,
 }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
@@ -90,7 +92,16 @@ export default function AppTable({
           console.log(res);
           const apps = res.data.data;
           console.log(apps);
-          setRows(createRows(apps)); // 直接更新状态
+          if (filteredRows && filteredRows.length > 0) {
+            const filteredRowsString = filteredRows.map((id) => id.toString());
+            const newRows = apps.filter((app) =>
+              filteredRowsString.includes(app.id.toString())
+            );
+            setRows(createRows(newRows));
+            console.log(newRows);
+          } else {
+            setRows(createRows(apps));
+          }
         })
         .catch((error) => {
           console.error("Error fetching app data:", error);
@@ -98,7 +109,7 @@ export default function AppTable({
     } else {
       router.push("/login");
     }
-  }, [router]);
+  }, [router, filteredRows]);
 
   useEffect(() => {
     fetchApps();
@@ -128,7 +139,7 @@ export default function AppTable({
     return newRows;
   }
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: "auto", width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -139,7 +150,7 @@ export default function AppTable({
         }}
         autoHeight={true}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
+        checkboxSelection={enableSlection}
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleSelectionModelChange}
       />

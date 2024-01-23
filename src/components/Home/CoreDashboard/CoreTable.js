@@ -1,16 +1,22 @@
 "use client";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Cookies from "js-cookie";
-import { httpToBackend } from "@/utils/http";
+import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import SensorsIcon from "@mui/icons-material/Sensors";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
+import TdengineDrawer from "@/components/Home/CoreDashboard/TdengineDrawer";
 
 export default function CoreTable({
   refresh,
   onSelectionChange,
   selectedRowIds,
+  enableSlection,
+  filteredRows,
+  handleOpenDrawer,
+  getTdengineUrl,
 }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
@@ -24,6 +30,10 @@ export default function CoreTable({
   }, [selectionModel, onSelectionChange]);
   const handleSelectionModelChange = (newSelectionModel) => {
     setSelectionModel(newSelectionModel);
+  };
+  const onConsoleIconClicked = (url) => {
+    handleOpenDrawer();
+    getTdengineUrl(url);
   };
   const deleteCore = useCallback(
     (id) => () => {
@@ -72,20 +82,34 @@ export default function CoreTable({
         headerName: "Actions",
         type: "actions",
         width: 80,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={deleteCore(params.id)}
-          />,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={() => {
-              router.push(`/cores/edit/${params.row.id}`);
-            }}
-          />,
-        ],
+        getActions: (params) => {
+          const basicActions = [
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={deleteCore(params.id)}
+            />,
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label="Edit"
+              onClick={() => {
+                router.push(`/cores/edit/${params.row.id}`);
+              }}
+              showInMenu
+            />,
+          ];
+          if (params.row.type === "TDengine") {
+            basicActions.push(
+              <GridActionsCellItem
+                icon={<SensorsIcon />}
+                label="TDengine Console"
+                onClick={() => onConsoleIconClicked(params.row.url)}
+                showInMenu
+              />
+            );
+          }
+          return basicActions;
+        },
       },
     ],
     [deleteCore]
@@ -100,15 +124,25 @@ export default function CoreTable({
           console.log(res);
           const cores = res.data.data;
           console.log(cores);
-          setRows(createRows(cores)); // 直接更新状态
+          if (filteredRows && filteredRows.length > 0) {
+            const filteredRowsString = filteredRows.map((id) => id.toString());
+            console.log(filteredRowsString);
+            const newRows = cores.filter((core) =>
+              filteredRowsString.includes(core.id.toString())
+            );
+            console.log(newRows);
+            setRows(createRows(newRows));
+          } else {
+            setRows(createRows(cores));
+          }
         })
         .catch((error) => {
           console.error("Error fetching core data:", error);
         });
     } else {
-      router.push("/login");
+      logout();
     }
-  }, [router]);
+  }, [router, filteredRows]);
 
   useEffect(() => {
     fetchCores();
@@ -128,7 +162,7 @@ export default function CoreTable({
     return newRows;
   }
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: "auto", width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -139,7 +173,7 @@ export default function CoreTable({
         }}
         autoHeight={true}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
+        checkboxSelection={enableSlection}
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleSelectionModelChange}
       />

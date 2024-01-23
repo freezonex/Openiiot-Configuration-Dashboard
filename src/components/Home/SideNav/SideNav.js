@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import Link from "next/link";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   List,
@@ -10,18 +9,11 @@ import {
   ListItemIcon,
   Divider,
 } from "@mui/material";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import HomeIcon from "@mui/icons-material/Home";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
-import AddFlow from "../AddFlow";
 import FlowNav from "./FlowNav";
 import { FlowContext } from "@/utils/flow-provider";
 import UserContext from "@/utils/user-context";
-import { httpToBackend, removeLoginInfo } from "@/utils/http";
+import { logout } from "@/utils/http";
 import EdgeNav from "./EdgeNav";
 import TenantNav from "./TenantNav";
 import UserNav from "./UserNav";
@@ -34,7 +26,6 @@ const PLACEHOLDER_LINKS = [
 
 function SideNav() {
   const [data, setData] = useState([]);
-  const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,64 +39,12 @@ function SideNav() {
     //     .then((res) => setData(res.data));
     // }
   }, [user, refresh]);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
-
-  const handleAddFlow = async (name, description) => {
-    if (name.trim() === "") {
-      setAlertOpen(true);
-      return;
-    }
-    router.push(
-      "/flows/create?" +
-        createQueryString("name", name) +
-        "&" +
-        createQueryString("description", description)
-    );
-
-    setOpen(false);
-  };
-
-  const handleEditFlow = (id) => {
-    router.push(`/flows/${id}?mode=${encodeURIComponent("edit")}`);
-  };
-
-  const handleDeleteFlow = async (id) => {
-    try {
-      await fetch("/api/flows/" + id, {
-        method: "DELETE",
-      })
-        .then((res) => res.json())
-        .then(router.push("/flows"));
-    } catch (error) {
-      console.log(error);
-    }
-    router.push("/flows");
-    setRefresh({});
-  };
-
   const handleNavToEdgePool = () => {
     console.log("nav");
   };
 
   const handleLogout = async () => {
-    httpToBackend.get("auth/logout").then((res) => {
-      console.log(res);
-      removeLoginInfo();
-      router.push("/login");
-    });
+    logout(router);
   };
   return (
     <React.Fragment>

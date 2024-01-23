@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Cookies from "js-cookie";
-import { httpToBackend } from "@/utils/http";
+import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
@@ -11,10 +11,11 @@ export default function EdgeTable({
   refresh,
   onSelectionChange,
   selectedRowIds,
+  enableSlection,
+  filteredRows,
 }) {
   const [rows, setRows] = useState([]);
   const router = useRouter();
-  console.log(selectedRowIds);
   const deleteEdge = useCallback(
     (id) => () => {
       console.log(id, typeof id);
@@ -99,16 +100,25 @@ export default function EdgeTable({
         .get("edge/get")
         .then((res) => {
           const edges = res.data.data;
-          setRows(createRows(edges)); // 直接更新状态
+          if (filteredRows && filteredRows.length > 0) {
+            const filteredRowsString = filteredRows.map((id) => id.toString());
+            const newRows = edges.filter((edge) =>
+              filteredRowsString.includes(edge.id.toString())
+            );
+            console.log(newRows);
+            setRows(createRows(newRows));
+          } else {
+            setRows(createRows(edges));
+          }
         })
         .catch((error) => {
           console.error("Error fetching edge data:", error);
           router.push("/login");
         });
     } else {
-      router.push("/login");
+      logout();
     }
-  }, [router]);
+  }, [router, filteredRows]);
 
   useEffect(() => {
     fetchEdges();
@@ -127,7 +137,7 @@ export default function EdgeTable({
     return newRows;
   }
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: "auto", width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -138,7 +148,7 @@ export default function EdgeTable({
         }}
         autoHeight={true}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
+        checkboxSelection={enableSlection}
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleSelectionModelChange}
       />
