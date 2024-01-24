@@ -122,7 +122,7 @@ export default function FlowTable({
 
   const fetchFlows = useCallback(() => {
     const token = Cookies.get("isv_token");
-    if (token) {
+    if (token && user) {
       httpToBackend
         .get("flow/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {

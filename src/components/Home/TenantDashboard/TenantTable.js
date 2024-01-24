@@ -4,7 +4,7 @@ import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { httpToBackend } from "@/utils/http";
+import { httpToBackend, logout } from "@/utils/http";
 import { useRouter } from "next/navigation";
 
 export default function TenantTable({ refresh, searchTerm }) {
@@ -102,7 +102,7 @@ export default function TenantTable({ refresh, searchTerm }) {
 
   const fetchTenants = useCallback(() => {
     const token = Cookies.get("isv_token");
-    if (token) {
+    if (token && user) {
       httpToBackend
         .get("tenant/get")
         .then((res) => {
@@ -116,7 +116,7 @@ export default function TenantTable({ refresh, searchTerm }) {
           console.error("Error fetching tenants data:", error);
         });
     } else {
-      router.push("/login");
+      logout(router);
     }
   }, [router]);
 

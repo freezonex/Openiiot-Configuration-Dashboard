@@ -7,7 +7,7 @@ import React, {
   useContext,
 } from "react";
 import Cookies from "js-cookie";
-import { httpToBackend } from "@/utils/http";
+import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
@@ -110,7 +110,7 @@ export default function AppTable({
 
   const fetchApps = useCallback(() => {
     const token = Cookies.get("isv_token");
-    if (token) {
+    if (token && user) {
       console.log(user);
       httpToBackend
         .get("app/get", { params: { tenant_id: user.tenant_id } })
@@ -134,7 +134,7 @@ export default function AppTable({
           console.error("Error fetching app data:", error);
         });
     } else {
-      router.push("/login");
+      logout(router);
     }
   }, [router, filteredRows]);
 

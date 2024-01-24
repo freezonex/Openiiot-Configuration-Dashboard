@@ -9,7 +9,7 @@ import React, {
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { httpToBackend } from "@/utils/http";
+import { httpToBackend, logout } from "@/utils/http";
 import { useRouter } from "next/navigation";
 import EditIcon from "@mui/icons-material/Edit";
 import UserContext from "@/utils/user-context";
@@ -107,7 +107,7 @@ export default function UserTable({ refresh, searchTerm }) {
 
   const fetchUsers = useCallback(() => {
     const token = Cookies.get("isv_token");
-    if (token) {
+    if (token && user) {
       httpToBackend
         .get("user/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
@@ -121,7 +121,7 @@ export default function UserTable({ refresh, searchTerm }) {
           console.error("Error fetching user data:", error);
         });
     } else {
-      router.push("/login");
+      logout(router);
     }
   }, [router]);
 

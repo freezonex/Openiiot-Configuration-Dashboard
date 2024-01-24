@@ -121,7 +121,7 @@ export default function EdgeTable({
 
   const fetchEdges = useCallback(async () => {
     const token = Cookies.get("isv_token");
-    if (token) {
+    if (token && user) {
       httpToBackend
         .get("edge/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
@@ -143,7 +143,7 @@ export default function EdgeTable({
           router.push("/login");
         });
     } else {
-      logout();
+      logout(router);
     }
   }, [router, filteredRows]);
 

@@ -142,7 +142,7 @@ export default function CoreTable({
 
   const fetchCores = useCallback(() => {
     const token = Cookies.get("isv_token");
-    if (token) {
+    if (token && user) {
       httpToBackend
         .get("core/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
@@ -166,7 +166,7 @@ export default function CoreTable({
           console.error("Error fetching core data:", error);
         });
     } else {
-      logout();
+      logout(router);
     }
   }, [router, filteredRows]);
 

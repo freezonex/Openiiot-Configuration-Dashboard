@@ -11,12 +11,12 @@ import {
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { httpToBackend, logout } from "@/utils/http";
-import SearchIcon from "@mui/icons-material/Search";
 
 import { useRouter } from "next/navigation";
 import EdgeTable from "../EdgeDashboard/EdgeTable";
 import CoreTable from "../CoreDashboard/CoreTable";
 import AppTable from "../AppDashboard/AppTable";
+import { BlackButton } from "@/components/Utils/BlackButton";
 
 function FlowDetails({ id }) {
   //   const [refresh, setRefresh] = useState({});
@@ -51,12 +51,26 @@ function FlowDetails({ id }) {
   }, [fetchFlow]);
   return (
     <Box sx={{ width: "100%" }}>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mt: 1, mb: 1 }}>
-        <Link underline="hover" color="inherit" href="/flows">
-          Flows
-        </Link>
-        <Typography color="text.primary">{flow.name}</Typography>
-      </Breadcrumbs>
+      <BlackButton
+        sx={{ mb: 1 }}
+        onClick={() => {
+          router.push("/flows");
+        }}
+      >
+        back
+      </BlackButton>
+      <Box
+        sx={{
+          width: "100%",
+          flexDirection: "row",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Typography color="text.primary" variant="h5">
+          Flow Details Page
+        </Typography>
+      </Box>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1, mb: 1 }}>
         Flow Name: {flow.name}
       </Typography>
@@ -76,6 +90,7 @@ function FlowDetails({ id }) {
         onSelectionChange={() => {}}
         enableSelection={false}
         filteredRows={flow.edge_ids}
+        searchTerm={""}
       ></EdgeTable>
       <Typography
         variant="h6"
@@ -88,6 +103,7 @@ function FlowDetails({ id }) {
         onSelectionChange={() => {}}
         enableSelection={false}
         filteredRows={flow.core_ids}
+        searchTerm={""}
       ></CoreTable>
       <Typography
         variant="h6"
@@ -100,6 +116,7 @@ function FlowDetails({ id }) {
         onSelectionChange={() => {}}
         enableSelection={false}
         filteredRows={flow.app_ids}
+        searchTerm={""}
       ></AppTable>
       <Box sx={{ width: "50%", mt: 2, mb: 2 }}></Box>
     </Box>
