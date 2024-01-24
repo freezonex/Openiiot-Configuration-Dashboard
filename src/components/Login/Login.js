@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Container,
   Box,
@@ -15,8 +15,17 @@ import {
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import Logo from "../Utils/Logo";
-import { login, loginWithSupos } from "@/utils/http";
+import {
+  login,
+  loginWithSupos,
+  logout,
+  httpToBackend,
+  getCurrentUser,
+  removeLoginInfo,
+} from "@/utils/http";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
 const Login = () => {
   const [formValues, setFormValues] = useState({
@@ -24,12 +33,18 @@ const Login = () => {
     username: "",
     password: "",
   });
+  const { user, setUser } = useContext(UserContext);
   const router = useRouter();
   const handleLoginBySupos = async (event) => {
     event.preventDefault();
-    loginWithSupos(() => {
-      router.push("/flows");
-    }, router);
+
+    loginWithSupos(
+      () => {
+        router.push("/flows");
+      },
+      router,
+      setUser
+    );
   };
 
   const handleValueChange = (event) => {
@@ -42,11 +57,12 @@ const Login = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    login(() => {
-      router.push("/users");
-    }, formValues);
+    setUser(login(formValues, router));
+    router.push("/users");
   };
-
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
   return (
     <Container
       component="main"

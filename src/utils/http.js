@@ -115,22 +115,55 @@ export function removeLoginInfo() {
   //sessionStorage.removeItem("isv_token");
   Cookies.remove("isv_token");
 }
-export function login(callback, body) {
+export function login(body, router) {
   if (typeof window !== "undefined") {
-    // CSR
     let token = Cookies.get("isv_token"); //use Cookies instead of session storage
     if (!token) {
-      httpToBackend.post("/auth/login", body).then((res) => {
-        console.log(res);
-        if (res.data) {
-          Cookies.set("isv_token", res.data.accesstoken, { expires: 1 });
-          console.log("登录信息获取完毕", res.data.accesstoken);
-          callback();
-        }
-      });
+      return (
+        httpToBackend
+          .post("/auth/login", body)
+          .then((res) => {
+            console.log(res);
+            if (res.data) {
+              Cookies.set("isv_token", res.data.accesstoken, { expires: 1 });
+              console.log("accesstoken recieved", res.data.accesstoken);
+              return getCurrentUser();
+            }
+          })
+          // .then((userinfo) => {
+          //   console.log("get current user:", userinfo);
+          //   setUser(userinfo);
+          //   router.push("/users");
+          // })
+          .catch((error) => {
+            removeLoginInfo();
+          })
+      );
     } else {
-      callback();
+      removeLoginInfo();
     }
+  }
+}
+export async function getCurrentUser() {
+  if (typeof window !== "undefined") {
+    // CSR
+    const token = Cookies.get("isv_token");
+    if (token) {
+      try {
+        const res = await httpToBackend.get("user/current");
+        const userInfo = {
+          name: res.data.data.username,
+          role: res.data.data.role,
+          tenant_id: res.data.data.tenant_id,
+        };
+        console.log(userInfo);
+        return userInfo;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        logout();
+      }
+    }
+    return Promise.reject("No token or SSR");
   }
 }
 export function logout(router) {
@@ -140,7 +173,7 @@ export function logout(router) {
     router.push("/login");
   });
 }
-export function loginWithSupos(callback, router) {
+export function loginWithSupos(callback, router, setUser) {
   if (typeof window !== "undefined") {
     // CSR
     let token = Cookies.get("isv_token"); //use Cookies instead of session storage
@@ -150,7 +183,6 @@ export function loginWithSupos(callback, router) {
         console.log("get code info", code, window.location.search);
         //如果有code则调用接口换取token
         httpToBackend
-
           .get("/auth/accessToken", {
             params: {
               code,
@@ -167,8 +199,12 @@ export function loginWithSupos(callback, router) {
               // window.sessionStorage.setItem("isv_token", data);
               Cookies.set("isv_token", data, { expires: 1 });
               console.log("登录信息获取完毕", data);
-              router.push("/flows");
+              return getCurrentUser();
             }
+          })
+          .then((userInfo) => {
+            setUser(userInfo);
+            callback();
           });
       } else {
         console.log(window.location.href);

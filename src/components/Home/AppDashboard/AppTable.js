@@ -1,11 +1,18 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import Cookies from "js-cookie";
 import { httpToBackend } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
 export default function AppTable({
   refresh,
@@ -13,8 +20,11 @@ export default function AppTable({
   selectedRowIds,
   enableSlection,
   filteredRows,
+  searchTerm,
 }) {
   const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
+  const { user } = useContext(UserContext);
   const router = useRouter();
 
   const deleteApp = useCallback(
@@ -40,7 +50,22 @@ export default function AppTable({
     },
     []
   );
-
+  const filteredSearchRows = allRows.filter((row) => {
+    return (
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.url.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+  useEffect(() => {
+    console.log("useEffect triggered:", searchTerm, allRows);
+    if (searchTerm !== "") {
+      setRows(filteredSearchRows);
+    } else {
+      fetchApps();
+    }
+  }, [searchTerm]);
   const columns = useMemo(
     () => [
       { field: "name", headerName: "Name", width: 160 },
@@ -86,11 +111,13 @@ export default function AppTable({
   const fetchApps = useCallback(() => {
     const token = Cookies.get("isv_token");
     if (token) {
+      console.log(user);
       httpToBackend
-        .get("app/get")
+        .get("app/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
           console.log(res);
           const apps = res.data.data;
+          setAllRows(createRows(apps));
           console.log(apps);
           if (filteredRows && filteredRows.length > 0) {
             const filteredRowsString = filteredRows.map((id) => id.toString());

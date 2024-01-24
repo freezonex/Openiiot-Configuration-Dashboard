@@ -16,8 +16,13 @@ import UserTable from "./UserTable";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
   const refreshTable = () => {
     setRefresh({});
+  };
+  const handleSearchChange = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <Box sx={{ width: "100%" }}>
@@ -49,10 +54,11 @@ function OverviewLayout() {
               </InputAdornment>
             ),
           }}
+          onChange={handleSearchChange}
         />
       </Box>
 
-      <UserTable refresh={refresh} />
+      <UserTable refresh={refresh} searchTerm={searchTerm} />
     </Box>
   );
 }

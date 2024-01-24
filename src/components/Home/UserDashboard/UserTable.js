@@ -1,14 +1,23 @@
 "use client";
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { httpToBackend } from "@/utils/http";
 import { useRouter } from "next/navigation";
 import EditIcon from "@mui/icons-material/Edit";
+import UserContext from "@/utils/user-context";
 
-export default function UserTable({ refresh }) {
+export default function UserTable({ refresh, searchTerm }) {
   const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
+  const { user } = useContext(UserContext);
   const router = useRouter();
 
   const deleteUser = useCallback(
@@ -34,17 +43,25 @@ export default function UserTable({ refresh }) {
     },
     []
   );
-
-  const toggleAdmin = useCallback(
-    (id) => () => {
-      setRows((prevRows) =>
-        prevRows.map((row) =>
-          row.id === id ? { ...row, isAdmin: !row.isAdmin } : row
-        )
-      );
-    },
-    []
-  );
+  const filteredRows = allRows.filter((row) => {
+    console.log(
+      row.description,
+      searchTerm,
+      row.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return (
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+  useEffect(() => {
+    console.log("useEffect triggered:", searchTerm, allRows);
+    if (searchTerm !== "") {
+      setRows(filteredRows);
+    } else {
+      fetchUsers();
+    }
+  }, [searchTerm]);
   const columns = useMemo(
     () => [
       { field: "name", headerName: "Name", width: 160 },
@@ -85,21 +102,21 @@ export default function UserTable({ refresh }) {
         ],
       },
     ],
-    [deleteUser, toggleAdmin]
+    [deleteUser]
   );
 
   const fetchUsers = useCallback(() => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
-        .get("user/get")
+        .get("user/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
           console.log(res);
           const users = res.data.data;
           console.log(users);
-          return createRows(users);
+          setRows(createRows(users));
+          setAllRows(createRows(users));
         })
-        .then((data) => setRows(data))
         .catch((error) => {
           console.error("Error fetching user data:", error);
         });

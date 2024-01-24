@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { httpToBackend } from "@/utils/http";
 import UserContext from "@/utils/user-context";
+import { BlackButton } from "@/components/Utils/BlackButton";
 
 const userRoles = [
   { value: "SuperAdmin" },
@@ -134,17 +135,7 @@ function UserForm({ isEdit, userName }) {
   }, []);
   return (
     <Box>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "black",
-          color: "white",
-          "&:hover": { backgroundColor: "darkgray" },
-        }}
-        onClick={handleBack}
-      >
-        back
-      </Button>
+      <BlackButton onClick={handleBack}>back</BlackButton>
       {isEdit ? (
         <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
           Edit User Info
@@ -242,27 +233,9 @@ function UserForm({ isEdit, userName }) {
         }}
       >
         {isEdit ? (
-          <Button
-            sx={{
-              backgroundColor: "black",
-              color: "white",
-              "&:hover": { backgroundColor: "darkgray" },
-            }}
-            onClick={handleUpdateUser}
-          >
-            update
-          </Button>
+          <BlackButton onClick={handleUpdateUser}>update</BlackButton>
         ) : (
-          <Button
-            sx={{
-              backgroundColor: "black",
-              color: "white",
-              "&:hover": { backgroundColor: "darkgray" },
-            }}
-            onClick={handleAddUser}
-          >
-            create
-          </Button>
+          <BlackButton onClick={handleAddUser}>create</BlackButton>
         )}
       </Box>
     </Box>

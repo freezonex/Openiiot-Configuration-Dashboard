@@ -1,18 +1,30 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import Cookies from "js-cookie";
 import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
 export default function FlowTable({
   refresh,
   onSelectionChange,
   selectedRowIds,
+  searchTerm,
 }) {
   const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
+
+  const { user } = useContext(UserContext);
+
   const router = useRouter();
   const deleteFlow = useCallback(
     (id) => () => {
@@ -48,7 +60,21 @@ export default function FlowTable({
   const handleSelectionModelChange = (newSelectionModel) => {
     setSelectionModel(newSelectionModel);
   };
-
+  const filteredSearchRows = allRows.filter((row) => {
+    return (
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.type.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+  useEffect(() => {
+    console.log("useEffect triggered:", searchTerm, allRows);
+    if (searchTerm !== "") {
+      setRows(filteredSearchRows);
+    } else {
+      fetchFlows();
+    }
+  }, [searchTerm]);
   const columns = useMemo(
     () => [
       { field: "name", headerName: "Name", width: 120 },
@@ -94,14 +120,15 @@ export default function FlowTable({
     [deleteFlow]
   );
 
-  const fetchFlows = useCallback(async () => {
+  const fetchFlows = useCallback(() => {
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
-        .get("flow/get")
+        .get("flow/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
           const flows = res.data.data;
-          setRows(createRows(flows)); // 直接更新状态
+          setRows(createRows(flows));
+          setAllRows(createRows(flows));
         })
         .catch((error) => {
           console.error("Error fetching flow data:", error);

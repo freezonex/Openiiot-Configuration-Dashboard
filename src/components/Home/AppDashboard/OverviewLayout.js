@@ -17,11 +17,16 @@ import AppTable from "./AppTable";
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [apps, setApps] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const handleSelectApp = (appIds) => {
     setApps(appIds);
   };
   const refreshTable = () => {
     setRefresh({});
+  };
+  const handleSearchChange = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <Box sx={{ width: "100%" }}>
@@ -53,6 +58,7 @@ function OverviewLayout() {
               </InputAdornment>
             ),
           }}
+          onChange={handleSearchChange}
         />
       </Box>
 
@@ -60,6 +66,7 @@ function OverviewLayout() {
         refresh={refresh}
         onSelectionChange={handleSelectApp}
         selectedRowIds={apps}
+        searchTerm={searchTerm}
       />
     </Box>
   );

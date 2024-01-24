@@ -17,11 +17,16 @@ import Link from "next/link";
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [edges, setEdges] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const handleSelectEdge = (edgeIds) => {
     setEdges(edgeIds);
   };
   const refreshTable = () => {
     setRefresh({});
+  };
+  const handleSearchChange = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <Box sx={{ width: "100%" }}>
@@ -53,6 +58,7 @@ function OverviewLayout() {
               </InputAdornment>
             ),
           }}
+          onChange={handleSearchChange}
         />
       </Box>
 
@@ -61,6 +67,7 @@ function OverviewLayout() {
         onSelectionChange={handleSelectEdge}
         selectedRowIds={edges}
         enableSlection={true}
+        searchTerm={searchTerm}
       />
     </Box>
   );

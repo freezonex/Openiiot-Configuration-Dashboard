@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TenantTable from "./TenantTable";
 import {
   Box,
@@ -16,8 +16,13 @@ import Link from "next/link";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
   const refreshTable = () => {
     setRefresh({});
+  };
+  const handleSearchChange = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <Box sx={{ width: "100%" }}>
@@ -49,10 +54,11 @@ function OverviewLayout() {
               </InputAdornment>
             ),
           }}
+          onChange={handleSearchChange}
         />
       </Box>
 
-      <TenantTable refresh={refresh} />
+      <TenantTable refresh={refresh} searchTerm={searchTerm} />
     </Box>
   );
 }

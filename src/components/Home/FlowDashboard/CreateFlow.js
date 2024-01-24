@@ -229,6 +229,7 @@ const FlowCreate = ({ isEdit }) => {
                 <EdgeTable
                   onSelectionChange={handleSelectEdge}
                   selectedRowIds={edges}
+                  enableSlection={true}
                 />
               </Box>
             )}
@@ -240,6 +241,7 @@ const FlowCreate = ({ isEdit }) => {
                 <CoreTable
                   onSelectionChange={handleSelectCore}
                   selectedRowIds={cores}
+                  enableSlection={true}
                 />
               </Box>
             )}
@@ -251,6 +253,7 @@ const FlowCreate = ({ isEdit }) => {
                 <AppTable
                   onSelectionChange={handleSelectApp}
                   selectedRowIds={apps}
+                  enableSlection={true}
                 />
               </Box>
             )}

@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import Cookies from "js-cookie";
 import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -7,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SensorsIcon from "@mui/icons-material/Sensors";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import TdengineDrawer from "@/components/Home/CoreDashboard/TdengineDrawer";
+import UserContext from "@/utils/user-context";
 
 export default function CoreTable({
   refresh,
@@ -17,8 +23,11 @@ export default function CoreTable({
   filteredRows,
   handleOpenDrawer,
   getTdengineUrl,
+  searchTerm,
 }) {
   const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
+  const { user } = useContext(UserContext);
   const router = useRouter();
   const [selectionModel, setSelectionModel] = useState(selectedRowIds);
 
@@ -58,6 +67,22 @@ export default function CoreTable({
     },
     []
   );
+  const filteredSearchRows = allRows.filter((row) => {
+    return (
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.url.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+  useEffect(() => {
+    console.log("useEffect triggered:", searchTerm, allRows);
+    if (searchTerm !== "") {
+      setRows(filteredSearchRows);
+    } else {
+      fetchCores();
+    }
+  }, [searchTerm]);
 
   const columns = useMemo(
     () => [
@@ -119,10 +144,11 @@ export default function CoreTable({
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
-        .get("core/get")
+        .get("core/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
           console.log(res);
           const cores = res.data.data;
+          setAllRows(createRows(cores));
           console.log(cores);
           if (filteredRows && filteredRows.length > 0) {
             const filteredRowsString = filteredRows.map((id) => id.toString());

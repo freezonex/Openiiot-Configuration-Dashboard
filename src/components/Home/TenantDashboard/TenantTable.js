@@ -7,8 +7,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { httpToBackend } from "@/utils/http";
 import { useRouter } from "next/navigation";
 
-export default function TenantTable({ refresh }) {
+export default function TenantTable({ refresh, searchTerm }) {
   const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
   const router = useRouter();
   const deleteTenant = useCallback(
     (id) => () => {
@@ -34,32 +35,25 @@ export default function TenantTable({ refresh }) {
     []
   );
 
-  const editTenant = useCallback(
-    (name) => () => {
-      console.log(id, typeof id);
-
-      const token = Cookies.get("isv_token");
-
-      if (token) {
-        httpToBackend
-          .post("tenant/update", { id })
-          .then((res) => {
-            console.log(res);
-            setRows((prevRows) =>
-              prevRows.map((row) =>
-                row.id === id ? { ...row, is_default: !row.is_default } : row
-              )
-            );
-          })
-          .catch((error) => {
-            console.error("Error deleting user:", error);
-          });
-      } else {
-        router.push("/login");
-      }
-    },
-    []
-  );
+  const filteredRows = allRows.filter((row) => {
+    console.log(
+      row.description,
+      searchTerm,
+      row.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return (
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+  useEffect(() => {
+    console.log("useEffect triggered:", searchTerm, allRows);
+    if (searchTerm !== "") {
+      setRows(filteredRows);
+    } else {
+      fetchTenants();
+    }
+  }, [searchTerm]);
   const columns = useMemo(
     () => [
       { field: "name", headerName: "Name", width: 160 },
@@ -103,7 +97,7 @@ export default function TenantTable({ refresh }) {
         ],
       },
     ],
-    [deleteTenant, editTenant]
+    [deleteTenant]
   );
 
   const fetchTenants = useCallback(() => {
@@ -115,7 +109,8 @@ export default function TenantTable({ refresh }) {
           console.log(res);
           const tenants = res.data.data;
           console.log(tenants);
-          setRows(createRows(tenants)); // 直接更新状态
+          setRows(createRows(tenants));
+          setAllRows(createRows(tenants));
         })
         .catch((error) => {
           console.error("Error fetching tenants data:", error);

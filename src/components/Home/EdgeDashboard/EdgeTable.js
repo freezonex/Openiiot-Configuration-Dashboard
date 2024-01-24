@@ -1,11 +1,18 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import Cookies from "js-cookie";
 import { httpToBackend, logout } from "@/utils/http";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
 export default function EdgeTable({
   refresh,
@@ -13,8 +20,11 @@ export default function EdgeTable({
   selectedRowIds,
   enableSlection,
   filteredRows,
+  searchTerm,
 }) {
   const [rows, setRows] = useState([]);
+  const [allRows, setAllRows] = useState([]);
+  const { user } = useContext(UserContext);
   const router = useRouter();
   const deleteEdge = useCallback(
     (id) => () => {
@@ -50,6 +60,22 @@ export default function EdgeTable({
   const handleSelectionModelChange = (newSelectionModel) => {
     setSelectionModel(newSelectionModel);
   };
+  const filteredSearchRows = allRows.filter((row) => {
+    return (
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.url.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+  useEffect(() => {
+    console.log("useEffect triggered:", searchTerm, allRows);
+    if (searchTerm !== "") {
+      setRows(filteredSearchRows);
+    } else {
+      fetchEdges();
+    }
+  }, [searchTerm]);
 
   const columns = useMemo(
     () => [
@@ -97,9 +123,10 @@ export default function EdgeTable({
     const token = Cookies.get("isv_token");
     if (token) {
       httpToBackend
-        .get("edge/get")
+        .get("edge/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
           const edges = res.data.data;
+          setAllRows(createRows(edges));
           if (filteredRows && filteredRows.length > 0) {
             const filteredRowsString = filteredRows.map((id) => id.toString());
             const newRows = edges.filter((edge) =>

@@ -17,6 +17,7 @@ import FlowTable from "./FlowTable";
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [flows, setFlows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSelectFlow = (flowIds) => {
     setFlows(flowIds);
@@ -24,7 +25,10 @@ function OverviewLayout() {
   const refreshTable = () => {
     setRefresh({});
   };
-
+  const handleSearchChange = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -55,6 +59,7 @@ function OverviewLayout() {
               </InputAdornment>
             ),
           }}
+          onChange={handleSearchChange}
         />
       </Box>
 
@@ -62,6 +67,7 @@ function OverviewLayout() {
         refresh={refresh}
         onSelectionChange={handleSelectFlow}
         selectedRowIds={flows}
+        searchTerm={searchTerm}
       />
     </Box>
   );

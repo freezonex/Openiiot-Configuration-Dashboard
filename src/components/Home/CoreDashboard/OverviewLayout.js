@@ -21,6 +21,8 @@ const drawerWidth = 350;
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [cores, setCores] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [openTdengineDrawer, setOpenTdengineDrawer] = useState(false);
   const [TdengineUrl, setTdengineUrl] = useState("");
   const mainContentStyle = {
@@ -42,6 +44,10 @@ function OverviewLayout() {
   };
   const refreshTable = () => {
     setRefresh({});
+  };
+  const handleSearchChange = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <Box sx={{ width: "100%", ...mainContentStyle }}>
@@ -74,6 +80,7 @@ function OverviewLayout() {
                 </InputAdornment>
               ),
             }}
+            onChange={handleSearchChange}
           />
         </Box>
 
@@ -83,6 +90,7 @@ function OverviewLayout() {
           setlectedRowIds={cores}
           handleOpenDrawer={handleDrawerOpenStatus}
           getTdengineUrl={getTdengineUrl}
+          searchTerm={searchTerm}
         />
       </Box>
       <TdengineDrawer
