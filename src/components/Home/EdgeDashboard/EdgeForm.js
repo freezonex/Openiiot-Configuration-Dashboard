@@ -37,7 +37,7 @@ function EdgeForm({ isEdit, edgeId }) {
       [name]: value,
     }));
   };
-
+  console.log(user);
   const handleBack = () => {
     router.push("/edges");
   };

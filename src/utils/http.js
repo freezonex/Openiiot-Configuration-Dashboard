@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import JSONbig from "json-bigint";
+import { redirect } from "next/dist/server/api-utils";
 
 export const httpToBackend = axios.create({
   baseURL: "/suposapi",
@@ -115,7 +116,7 @@ export function removeLoginInfo() {
   //sessionStorage.removeItem("isv_token");
   Cookies.remove("isv_token");
 }
-export function login(body, router) {
+export function login(body, callback, setUser, rememberMe) {
   if (typeof window !== "undefined") {
     let token = Cookies.get("isv_token"); //use Cookies instead of session storage
     if (!token) {
@@ -125,10 +126,16 @@ export function login(body, router) {
           .then((res) => {
             console.log(res);
             if (res.data) {
-              Cookies.set("isv_token", res.data.accesstoken, { expires: 1 });
+              Cookies.set("isv_token", res.data.accesstoken, {
+                expires: rememberMe ? 30 : 1,
+              });
               console.log("accesstoken recieved", res.data.accesstoken);
               return getCurrentUser();
             }
+          })
+          .then((userinfo) => {
+            setUser(userinfo);
+            callback();
           })
           // .then((userinfo) => {
           //   console.log("get current user:", userinfo);
@@ -173,7 +180,7 @@ export function logout(router) {
     router.push("/login");
   });
 }
-export function loginWithSupos(callback, router, setUser) {
+export function loginWithSupos(callback, setUser) {
   if (typeof window !== "undefined") {
     // CSR
     let token = Cookies.get("isv_token"); //use Cookies instead of session storage
@@ -197,7 +204,9 @@ export function loginWithSupos(callback, router, setUser) {
             if (data) {
               // //请求结束获取到数据
               // window.sessionStorage.setItem("isv_token", data);
-              Cookies.set("isv_token", data, { expires: 1 });
+              Cookies.set("isv_token", data, {
+                expires: 1,
+              });
               console.log("登录信息获取完毕", data);
               return getCurrentUser();
             }
@@ -209,13 +218,18 @@ export function loginWithSupos(callback, router, setUser) {
       } else {
         console.log(window.location.href);
         console.log(process.env.NEXT_PUBLIC_SUPOS_URL);
-        router.push(
+        console.log(
           `${
             process.env.NEXT_PUBLIC_SUPOS_URL
           }/inter-api/auth/v1/oauth2/authorize?responseType=code&state=1&redirectUri=${encodeURIComponent(
             window.location.href
           )}`
         );
+        window.location.href = `${
+          process.env.NEXT_PUBLIC_SUPOS_URL
+        }/inter-api/auth/v1/oauth2/authorize?responseType=code&state=1&redirectUri=${encodeURIComponent(
+          window.location.href
+        )}`;
       }
     } else {
       callback();

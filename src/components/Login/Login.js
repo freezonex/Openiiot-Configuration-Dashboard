@@ -15,17 +15,10 @@ import {
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import Logo from "../Utils/Logo";
-import {
-  login,
-  loginWithSupos,
-  logout,
-  httpToBackend,
-  getCurrentUser,
-  removeLoginInfo,
-} from "@/utils/http";
-import Cookies from "js-cookie";
+import { login, loginWithSupos, getCurrentUser } from "@/utils/http";
 import { useRouter } from "next/navigation";
 import UserContext from "@/utils/user-context";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [formValues, setFormValues] = useState({
@@ -33,18 +26,19 @@ const Login = () => {
     username: "",
     password: "",
   });
+  const [rememberMe, setRememberMe] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
   const handleLoginBySupos = async (event) => {
     event.preventDefault();
 
-    loginWithSupos(
-      () => {
-        router.push("/flows");
-      },
-      router,
-      setUser
-    );
+    loginWithSupos(() => {
+      router.push("/flows");
+    }, setUser);
+  };
+
+  const handlerRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
   };
 
   const handleValueChange = (event) => {
@@ -57,9 +51,23 @@ const Login = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    setUser(login(formValues, router));
-    router.push("/users");
+    login(
+      formValues,
+      () => {
+        router.push("/flows");
+      },
+      setUser,
+      rememberMe
+    );
   };
+  useEffect(() => {
+    const authToken = Cookies.get("isv_token");
+    if (authToken) {
+      setUser(getCurrentUser());
+      router.push("/flows");
+    }
+  }, []);
+
   useEffect(() => {
     console.log(user);
   }, [user]);
@@ -153,7 +161,14 @@ const Login = () => {
           }}
         >
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={
+              <Checkbox
+                checked={rememberMe}
+                onChange={handlerRememberMeChange}
+                value="remember"
+                color="primary"
+              />
+            }
             label="Remember me"
             sx={{
               "& .MuiSvgIcon-root": { fontSize: 18 },

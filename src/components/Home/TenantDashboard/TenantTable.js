@@ -1,16 +1,24 @@
 "use client";
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { httpToBackend, logout } from "@/utils/http";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
 export default function TenantTable({ refresh, searchTerm }) {
   const [rows, setRows] = useState([]);
   const [allRows, setAllRows] = useState([]);
   const router = useRouter();
+  const { user } = useContext(UserContext);
   const deleteTenant = useCallback(
     (id) => () => {
       console.log(id, typeof id);

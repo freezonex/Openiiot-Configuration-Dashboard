@@ -125,22 +125,25 @@ export default function EdgeTable({
       httpToBackend
         .get("edge/get", { params: { tenant_id: user.tenant_id } })
         .then((res) => {
-          const edges = res.data.data;
-          setAllRows(createRows(edges));
-          if (filteredRows && filteredRows.length > 0) {
-            const filteredRowsString = filteredRows.map((id) => id.toString());
-            const newRows = edges.filter((edge) =>
-              filteredRowsString.includes(edge.id.toString())
-            );
-            console.log(newRows);
-            setRows(createRows(newRows));
-          } else {
-            setRows(createRows(edges));
+          if (res.status !== 500) {
+            const edges = res.data.data;
+            setAllRows(createRows(edges));
+            if (filteredRows && filteredRows.length > 0) {
+              const filteredRowsString = filteredRows.map((id) =>
+                id.toString()
+              );
+              const newRows = edges.filter((edge) =>
+                filteredRowsString.includes(edge.id.toString())
+              );
+              console.log(newRows);
+              setRows(createRows(newRows));
+            } else {
+              setRows(createRows(edges));
+            }
           }
         })
         .catch((error) => {
           console.error("Error fetching edge data:", error);
-          router.push("/login");
         });
     } else {
       logout(router);

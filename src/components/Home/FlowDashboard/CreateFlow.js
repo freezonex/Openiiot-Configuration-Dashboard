@@ -35,9 +35,8 @@ const FlowCreate = ({ isEdit }) => {
   const [cores, setCores] = useState([]);
   const [apps, setApps] = useState([]);
 
-  const { setRefresh } = useContext(FlowContext);
   const { user } = useContext(UserContext);
-  useEffect(() => {});
+
   const handleValueChange = (event) => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({
@@ -54,9 +53,10 @@ const FlowCreate = ({ isEdit }) => {
   const handleSelectApp = useCallback((AppIds) => {
     setApps(AppIds);
   }, []);
-
+  console.log(user);
   const handleFinish = async (event) => {
     event.preventDefault();
+
     const body = {
       name: formValues.name,
       description: formValues.description,
@@ -75,6 +75,7 @@ const FlowCreate = ({ isEdit }) => {
       })
       .then((id) => {
         console.log(id);
+        router.push("/flows");
       });
   };
 
@@ -230,6 +231,7 @@ const FlowCreate = ({ isEdit }) => {
                   onSelectionChange={handleSelectEdge}
                   selectedRowIds={edges}
                   enableSlection={true}
+                  searchTerm={""}
                 />
               </Box>
             )}
@@ -242,6 +244,7 @@ const FlowCreate = ({ isEdit }) => {
                   onSelectionChange={handleSelectCore}
                   selectedRowIds={cores}
                   enableSlection={true}
+                  searchTerm={""}
                 />
               </Box>
             )}
@@ -254,6 +257,7 @@ const FlowCreate = ({ isEdit }) => {
                   onSelectionChange={handleSelectApp}
                   selectedRowIds={apps}
                   enableSlection={true}
+                  searchTerm={""}
                 />
               </Box>
             )}
