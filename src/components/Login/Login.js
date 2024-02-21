@@ -61,16 +61,26 @@ const Login = () => {
     );
   };
   useEffect(() => {
-    const authToken = Cookies.get("isv_token");
-    if (authToken) {
-      setUser(getCurrentUser());
+    const checkUserAndRedirect = async () => {
+      const authToken = Cookies.get("isv_token");
+      if (authToken) {
+        try {
+          const user = await getCurrentUser();
+          setUser(user);
+        } catch (error) {
+          console.error("获取用户信息失败", error);
+        }
+      }
+    };
+    checkUserAndRedirect();
+  }, [router]);
+  useEffect(() => {
+    if (user) {
+      console.log(user);
       router.push("/flows");
     }
-  }, []);
+  }, [user, router]);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
   return (
     <Container
       component="main"

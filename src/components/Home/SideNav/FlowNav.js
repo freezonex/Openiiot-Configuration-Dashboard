@@ -15,9 +15,11 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import SendIcon from "@mui/icons-material/Send";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import UserContext from "@/utils/user-context";
 
-export default function FlowNav({ data }) {
+export default function FlowNav() {
   const [open, setOpen] = React.useState(true);
+  const { user } = React.useContext(UserContext);
   const router = useRouter();
   const handleClick = () => {
     setOpen(!open);
@@ -52,35 +54,24 @@ export default function FlowNav({ data }) {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }} component={Link} href="/flows/create">
-            <ListItemIcon>
-              <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Create Flow" />
-          </ListItemButton>
+          {user.role !== "Viewer" && (
+            <ListItemButton
+              sx={{ pl: 4 }}
+              component={Link}
+              href="/flows/create"
+            >
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Create Flow" />
+            </ListItemButton>
+          )}
           <ListItemButton sx={{ pl: 4 }} component={Link} href="/flows">
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="Flows" />
           </ListItemButton>
-          {data.map(({ name, id }) => {
-            const href = `/flows/${id}?mode=${encodeURIComponent("view")}`;
-            return (
-              <ListItem key={id} disablePadding sx={{ pl: 4 }}>
-                <ListItemButton component={Link} href={href}>
-                  <ListItemIcon>
-                    <AccountTreeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={name} />
-                </ListItemButton>
-                <ListItemIcon>
-                  <EditIcon onClick={() => handleEditFlow(id)}></EditIcon>
-                  <DeleteIcon onClick={() => handleDeleteFlow(id)}></DeleteIcon>
-                </ListItemIcon>
-              </ListItem>
-            );
-          })}
         </List>
       </Collapse>
     </List>

@@ -108,32 +108,35 @@ export default function CoreTable({
         type: "actions",
         width: 80,
         getActions: (params) => {
-          const basicActions = [
-            <GridActionsCellItem
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={deleteCore(params.id)}
-            />,
-            <GridActionsCellItem
-              icon={<EditIcon />}
-              label="Edit"
-              onClick={() => {
-                router.push(`/cores/edit/${params.row.id}`);
-              }}
-              showInMenu
-            />,
-          ];
-          if (params.row.type === "TDengine") {
-            basicActions.push(
+          if (user.role !== "Viewer") {
+            const basicActions = [
               <GridActionsCellItem
-                icon={<SensorsIcon />}
-                label="TDengine Console"
-                onClick={() => onConsoleIconClicked(params.row.url)}
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={deleteCore(params.id)}
+              />,
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                onClick={() => {
+                  router.push(`/cores/edit/${params.row.id}`);
+                }}
                 showInMenu
-              />
-            );
+              />,
+            ];
+            if (params.row.type === "TDengine") {
+              basicActions.push(
+                <GridActionsCellItem
+                  icon={<SensorsIcon />}
+                  label="TDengine Console"
+                  onClick={() => onConsoleIconClicked(params.row.url)}
+                  showInMenu
+                />
+              );
+            }
+            return basicActions;
           }
-          return basicActions;
+          return [];
         },
       },
     ],

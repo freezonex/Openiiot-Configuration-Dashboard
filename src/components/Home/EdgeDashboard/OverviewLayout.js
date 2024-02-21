@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import EdgeTable from "./EdgeTable";
 import {
   Box,
@@ -13,11 +13,13 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
+import UserContext from "@/utils/user-context";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [edges, setEdges] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const { user } = useContext(UserContext);
   const handleSelectEdge = (edgeIds) => {
     setEdges(edgeIds);
   };
@@ -37,9 +39,11 @@ function OverviewLayout() {
         <IconButton color="inherit" onClick={refreshTable}>
           <RefreshIcon />
         </IconButton>
-        <IconButton color="inherit" component={Link} href="/edges/create">
-          <AddIcon />
-        </IconButton>
+        {user.role !== "Viewer" && (
+          <IconButton color="inherit" component={Link} href="/edges/create">
+            <AddIcon />
+          </IconButton>
+        )}
         <IconButton color="inherit">
           <MoreVertIcon />
         </IconButton>

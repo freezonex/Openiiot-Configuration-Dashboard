@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   TextField,
@@ -13,10 +13,12 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import FlowTable from "./FlowTable";
+import UserContext from "@/utils/user-context";
 
 function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [flows, setFlows] = useState([]);
+  const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSelectFlow = (flowIds) => {
@@ -38,9 +40,11 @@ function OverviewLayout() {
         <IconButton color="inherit" onClick={refreshTable}>
           <RefreshIcon />
         </IconButton>
-        <IconButton color="inherit" component={Link} href="/flows/create">
-          <AddIcon />
-        </IconButton>
+        {user.role !== "Viewer" && (
+          <IconButton color="inherit" component={Link} href="/flows/create">
+            <AddIcon />
+          </IconButton>
+        )}
         <IconButton color="inherit">
           <MoreVertIcon />
         </IconButton>

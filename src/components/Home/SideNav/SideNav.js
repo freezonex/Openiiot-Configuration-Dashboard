@@ -31,14 +31,8 @@ function SideNav() {
   const searchParams = useSearchParams();
   const { refresh, setRefresh } = useContext(FlowContext);
   const { user } = useContext(UserContext);
-
-  useEffect(() => {
-    // if (user) {
-    //   fetch("/api/user/flows/" + user.id)
-    //     .then((res) => res.json())
-    //     .then((res) => setData(res.data));
-    // }
-  }, [user, refresh]);
+  console.log(user);
+  useEffect(() => {}, [user, refresh]);
   const handleNavToEdgePool = () => {
     console.log("nav");
   };
@@ -48,8 +42,10 @@ function SideNav() {
   };
   return (
     <React.Fragment>
-      <TenantNav></TenantNav>
-      <UserNav></UserNav>
+      {user.role === "SuperAdmin" && <TenantNav />}
+      {(user.role === "SuperAdmin" || user.role === "Admin") && (
+        <UserNav></UserNav>
+      )}
       <EdgeNav></EdgeNav>
       <CoreNav></CoreNav>
       <AppNav></AppNav>

@@ -24,7 +24,6 @@ export default function FlowTable({
   const [allRows, setAllRows] = useState([]);
 
   const { user } = useContext(UserContext);
-
   const router = useRouter();
   const deleteFlow = useCallback(
     (id) => () => {
@@ -100,21 +99,26 @@ export default function FlowTable({
         headerName: "Actions",
         type: "actions",
         width: 80,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={deleteFlow(params.id)}
-          />,
-          <GridActionsCellItem
-            icon={<EditNoteIcon />}
-            label="View Details"
-            onClick={() => {
-              router.push(`/flows/${params.id}`);
-            }}
-            showInMenu
-          />,
-        ],
+        getActions: (params) => {
+          if (user.role !== "Viewer") {
+            return [
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={deleteFlow(params.id)}
+              />,
+              <GridActionsCellItem
+                icon={<EditNoteIcon />}
+                label="View Details"
+                onClick={() => {
+                  router.push(`/flows/${params.id}`);
+                }}
+                showInMenu
+              />,
+            ];
+          }
+          return [];
+        },
       },
     ],
     [deleteFlow]

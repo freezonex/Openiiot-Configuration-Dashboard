@@ -65,6 +65,16 @@ export default function UserTable({ refresh, searchTerm }) {
   const columns = useMemo(
     () => [
       { field: "name", headerName: "Name", width: 160 },
+      {
+        field: "isCurrentUser",
+        valueGetter: (params) => {
+          if (params.row.name === user.name) {
+            return true;
+          }
+          return false;
+        },
+        type: "boolean",
+      },
       { field: "description", headerName: "Description", width: 180 },
       { field: "role", headerName: "Role", width: 120 },
       { field: "auth_id", headerName: "Auth ID", width: 120 },

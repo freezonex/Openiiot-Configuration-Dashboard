@@ -163,7 +163,6 @@ export async function getCurrentUser() {
           role: res.data.data.role,
           tenant_id: res.data.data.tenant_id,
         };
-        console.log(userInfo);
         return userInfo;
       } catch (error) {
         console.error("Error fetching user data:", error);

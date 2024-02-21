@@ -89,20 +89,25 @@ export default function AppTable({
         headerName: "Actions",
         type: "actions",
         width: 80,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={deleteApp(params.id)}
-          />,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={() => {
-              router.push(`/apps/edit/${params.row.id}`);
-            }}
-          />,
-        ],
+        getActions: (params) => {
+          if (user.role !== "Viewer") {
+            return [
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={deleteApp(params.id)}
+              />,
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                onClick={() => {
+                  router.push(`/apps/edit/${params.row.id}`);
+                }}
+              />,
+            ];
+          }
+          return [];
+        },
       },
     ],
     [deleteApp]

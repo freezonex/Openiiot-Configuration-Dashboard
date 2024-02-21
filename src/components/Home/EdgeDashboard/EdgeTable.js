@@ -100,20 +100,25 @@ export default function EdgeTable({
         headerName: "Actions",
         type: "actions",
         width: 80,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={deleteEdge(params.id)}
-          />,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={() => {
-              router.push(`/edges/edit/${params.row.id}`);
-            }}
-          />,
-        ],
+        getActions: (params) => {
+          if (user.role !== "Viewer") {
+            return [
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={deleteEdge(params.id)}
+              />,
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                onClick={() => {
+                  router.push(`/edges/edit/${params.row.id}`);
+                }}
+              />,
+            ];
+          }
+          return [];
+        },
       },
     ],
     [deleteEdge]

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   TextField,
@@ -15,6 +15,7 @@ import Link from "next/link";
 import CoreTable from "./CoreTable";
 import theme from "@/components/ThemeRegistry/theme";
 import TdengineDrawer from "@/components/Home/CoreDashboard/TdengineDrawer";
+import UserContext from "@/utils/user-context";
 
 const drawerWidth = 350;
 
@@ -22,7 +23,7 @@ function OverviewLayout() {
   const [refresh, setRefresh] = useState({});
   const [cores, setCores] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const { user } = useContext(UserContext);
   const [openTdengineDrawer, setOpenTdengineDrawer] = useState(false);
   const [TdengineUrl, setTdengineUrl] = useState("");
   const mainContentStyle = {
@@ -59,9 +60,11 @@ function OverviewLayout() {
           <IconButton color="inherit" onClick={refreshTable}>
             <RefreshIcon />
           </IconButton>
-          <IconButton color="inherit" component={Link} href="/cores/create">
-            <AddIcon />
-          </IconButton>
+          {user.role !== "Viewer" && (
+            <IconButton color="inherit" component={Link} href="/cores/create">
+              <AddIcon />
+            </IconButton>
+          )}
           <IconButton color="inherit">
             <MoreVertIcon />
           </IconButton>

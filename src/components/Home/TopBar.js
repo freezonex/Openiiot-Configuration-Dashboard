@@ -3,13 +3,12 @@ import React, { useContext, useState } from "react";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import UserContext from "@/utils/user-context";
 import Link from "next/link";
+import { Menu, MenuItem } from "@mui/material";
 
 function TopBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -66,12 +65,8 @@ function TopBar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose} component={Link} href="/user">
-                Profile
-              </MenuItem>
-              <MenuItem onClick={handleClose} component={Link} href="/user">
-                My account
-              </MenuItem>
+              <MenuItem onClick={handleClose}>Username: {user.name}</MenuItem>
+              <MenuItem onClick={handleClose}>Role: {user.role}</MenuItem>
             </Menu>
           </div>
         )}
