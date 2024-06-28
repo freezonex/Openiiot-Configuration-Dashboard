@@ -11,7 +11,8 @@ const nextConfig = {
     return [
       {
         source: "/suposapi/:slug*",
-        destination: `http://localhost:8085/:slug*`,
+        //destination: `http://localhost:8085/:slug*`,
+        destination: `http://openiiot-server-service.openiiot:8085/:slug*`,
       },
       //destination: `http://openiiot-server-service.openiiot:8085/:slug*`,
     ];
